@@ -10,7 +10,7 @@ package com.morostami.archsample.di
 
 import android.app.Application
 import androidx.room.Room
-import com.morostami.archsample.data.CoinsListRepositoryImp
+import com.morostami.archsample.data.CoinsListRepositoryImpl
 import com.morostami.archsample.data.api.CoinGeckoService
 import com.morostami.archsample.data.local.CoinsRoomDao
 import com.morostami.archsample.data.local.CoinsRoomDataBase
@@ -49,6 +49,6 @@ class DataModule {
     @Singleton
     @Provides
     fun provideCoinsListRepository(coinGeckoService: CoinGeckoService,  coinsRoomDataSource: CoinsRoomDataSource) : CoinsListRepository {
-        return CoinsListRepositoryImp(coinGeckoService, coinsRoomDataSource)
+        return CoinsListRepositoryImpl(coinGeckoService, coinsRoomDataSource)
     }
 }

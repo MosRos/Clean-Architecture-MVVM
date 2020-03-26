@@ -9,13 +9,14 @@
 package com.morostami.archsample.di
 
 import android.app.Application
+import com.morostami.archsample.ui.CoinListFragment
 import com.morostami.archsample.ui.MainActivity
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [AppModule::class, NetModule::class])
+@Component(modules = [AppModule::class, NetModule::class, DataModule::class, AppSubComponents::class])
 interface AppComponent {
     @Component.Builder
     interface Builder {
@@ -24,5 +25,5 @@ interface AppComponent {
         fun build() : AppComponent
     }
 
-    fun injectMainActivity(mainActivity: MainActivity)
+    fun coinsComponent() : CoinsComponent.Factory
 }

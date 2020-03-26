@@ -10,17 +10,22 @@ package com.morostami.archsample.ui
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
 import com.morostami.archsample.MainApp
 import com.morostami.archsample.R
+import com.morostami.archsample.di.CoinsComponent
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
+
+    lateinit var coinsComponent: CoinsComponent
 
     @Inject
     lateinit var mainViewModel: MainViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as MainApp).appComponent.injectMainActivity(this)
+        coinsComponent = (application as MainApp).appComponent.coinsComponent().create()
+        coinsComponent.injectMainActivity(this)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
     }

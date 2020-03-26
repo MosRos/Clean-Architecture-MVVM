@@ -5,6 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 import io.realm.RealmObject
+import kotlinx.android.parcel.Parcelize
 
 @Entity
 open class Coin(
@@ -14,5 +15,6 @@ open class Coin(
     var name: String? = "xxx", // 01coin
     @SerializedName("symbol")
     @PrimaryKey
-    @io.realm.annotations.PrimaryKey var symbol: String = "xxx" // zoc
+    @io.realm.annotations.PrimaryKey
+    var symbol: String = "xxx" // zoc
 ) : RealmObject()
