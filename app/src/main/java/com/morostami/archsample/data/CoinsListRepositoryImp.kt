@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import timber.log.Timber
 import javax.inject.Inject
 
 class CoinsListRepositoryImpl @Inject constructor(
@@ -35,7 +36,7 @@ class CoinsListRepositoryImpl @Inject constructor(
                 limit: Int,
                 offset: Int
             ): List<Coin>? {
-                return fetchFromDb()
+                return fetchFromDb().subList(0, 800)
             }
 
             override suspend fun validateCache(cachedData: List<Coin>?): Boolean {
@@ -49,25 +50,30 @@ class CoinsListRepositoryImpl @Inject constructor(
             override suspend fun persistData(apiData: List<Coin>) {
                 saveCoins(apiData)
             }
-
-            override fun flow(): Flow<Resource<List<Coin>>> {
-                return super.flow()
-            }
         }.flow()
 
     }
 
     private suspend fun fetchFromDb() : List<Coin> {
-        return GlobalScope.async(Dispatchers.IO) {
+        val coinsResult: List<Coin> = GlobalScope.async(Dispatchers.IO) {
             coinsRoomDataSource.getCoinsList()
         }.await()
+        Timber.e(coinsResult.size.toString())
+        return coinsResult
     }
 
     private suspend fun fetchFromApi() : NetworkResponse<List<Coin>, CoinGeckoApiError> {
-        return coinsGeckoService.getCoins()
+        val coinsResult = coinsGeckoService.getCoins()
+        when(coinsResult){
+            is NetworkResponse.Success -> Timber.e(coinsResult.body.size.toString())
+            is NetworkResponse.NetworkError -> Timber.e(coinsResult.error.toString())
+            is NetworkResponse.ServerError -> Timber.e(coinsResult.body.toString())
+        }
+        return coinsResult
     }
 
     suspend fun saveCoins(coins: List<Coin>) {
+        Timber.e("Coins To Insert In DB ${coins.size}")
         GlobalScope.async(Dispatchers.IO) {
             coinsRoomDataSource.insertCoins(coins)
         }

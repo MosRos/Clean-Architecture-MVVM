@@ -15,6 +15,7 @@ import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.utils.LoadingState
 import com.morostami.archsample.utils.Resource
 import com.morostami.archsample.utils.invoke
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -29,7 +30,7 @@ class MainViewModel @Inject constructor(private val coinsListUseCase: CoinsListU
     val loading: LiveData<LoadingState>
         get() = _loading
 
-    var coinsList: LiveData<List<Coin>> = MutableLiveData()
+    var coinsList: LiveData<List<Coin>> = MutableLiveData(ArrayList())
 
     init {
         getCoinsList()
@@ -37,23 +38,45 @@ class MainViewModel @Inject constructor(private val coinsListUseCase: CoinsListU
 
     private fun getCoinsList() {
         _loading.value = LoadingState.LOADING
-        viewModelScope.launch {
+//        viewModelScope.launch {
+//            coinsListUseCase.getCoinsList().collect {coinsRes ->
+//                when(coinsRes) {
+//                    is Resource.Success -> {
+//                        Timber.e(coinsRes.invoke().size.toString())
+//                        coinsList = liveData {
+//                            emit(coinsRes.invoke()!!)
+//                        }
+//                        _loading.postValue(LoadingState.LOADED)
+//                    }
+//                    is Resource.Error<*, *> -> {
+//                        Timber.e(coinsRes.error.toString())
+//                        _loading.postValue(LoadingState.LOADED)
+//                    }
+//                    is Resource.Loading -> _loading.postValue(LoadingState.LOADING)
+//                }
+//
+//            }
+//        }
+
+        coinsList = liveData {
             coinsListUseCase.getCoinsList().collect {coinsRes ->
                 when(coinsRes) {
                     is Resource.Success -> {
-                        coinsList = liveData {
-                            emit(coinsRes.invoke()!!)
-                        }
-                        _loading.postValue(LoadingState.LOADED)
+                        Timber.e(coinsRes.invoke().size.toString())
+                        emit(coinsRes.invoke()!!)
+                        setLoadingState(LoadingState.LOADED)
                     }
                     is Resource.Error<*, *> -> {
                         Timber.e(coinsRes.error.toString())
-                        _loading.postValue(LoadingState.LOADED)
+                        setLoadingState(LoadingState.error("fuck"))
                     }
-                    is Resource.Loading -> _loading.postValue(LoadingState.LOADING)
+                    is Resource.Loading -> { setLoadingState(LoadingState.LOADING) }
                 }
-
             }
         }
+    }
+
+    private fun setLoadingState(state: LoadingState) {
+        _loading.value = state
     }
 }

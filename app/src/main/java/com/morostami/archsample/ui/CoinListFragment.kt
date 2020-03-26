@@ -16,6 +16,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.MainApp
@@ -23,6 +24,9 @@ import com.morostami.archsample.R
 import com.morostami.archsample.databinding.FragmentCoinsListBinding
 import com.morostami.archsample.di.CoinsComponent
 import com.morostami.archsample.domain.model.Coin
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class CoinListFragment : Fragment() {
@@ -48,6 +52,7 @@ class CoinListFragment : Fragment() {
         dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_coins_list, container, false)
         mContext = context ?: dataBinding.rootLayout.context
         dataBinding.mainViewModel = mainViewModel
+        dataBinding.lifecycleOwner = this
         return dataBinding.rootLayout
     }
 
@@ -76,6 +81,5 @@ class CoinListFragment : Fragment() {
 
     private fun updateCoinsAdapter(coins: List<Coin>) {
         coinsAdapter.setCoinsList(coins)
-        coinsAdapter.notifyDataSetChanged()
     }
 }

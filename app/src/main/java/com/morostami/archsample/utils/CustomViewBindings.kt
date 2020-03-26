@@ -8,6 +8,7 @@
 
 package com.morostami.archsample.utils
 
+import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
 import androidx.core.view.isVisible
@@ -31,13 +32,19 @@ fun ImageView.bindImageUrl(url: String?) {
     }
 }
 
+@BindingAdapter("visibleOrGone")
+fun View.setVisibleOrGone(show: Boolean) {
+    visibility = if (show) View.VISIBLE else View.GONE
+}
+
+
 @BindingAdapter(value = ["setupVisibility"])
 fun ProgressBar.progressVisibility(loadingState: LoadingState?) {
     loadingState?.let {
-        isVisible = when(it.status) {
-            LoadingState.Status.LOADING -> true
-            LoadingState.Status.SUCCESS -> false
-            LoadingState.Status.FAILED -> false
+        this.visibility = when(it.status) {
+            LoadingState.Status.LOADING -> View.VISIBLE
+            LoadingState.Status.SUCCESS -> View.GONE
+            LoadingState.Status.FAILED -> View.INVISIBLE
         }
     }
 }
