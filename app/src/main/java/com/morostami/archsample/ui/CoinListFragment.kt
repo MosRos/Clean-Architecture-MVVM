@@ -63,6 +63,7 @@ class CoinListFragment : Fragment() {
     }
 
     private fun setObservers() {
+        mainViewModel.fragName.set("Coins List")
         mainViewModel.coinsList.observe(viewLifecycleOwner, Observer {
             it?.let {
                 updateCoinsAdapter(it)

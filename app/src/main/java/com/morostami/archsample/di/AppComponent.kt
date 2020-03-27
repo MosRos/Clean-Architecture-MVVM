@@ -9,11 +9,11 @@
 package com.morostami.archsample.di
 
 import android.app.Application
-import com.morostami.archsample.ui.CoinListFragment
-import com.morostami.archsample.ui.MainActivity
+import android.content.SharedPreferences
 import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
+
 
 @Singleton
 @Component(modules = [AppModule::class, NetModule::class, DataModule::class, AppSubComponents::class])

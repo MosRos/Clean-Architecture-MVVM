@@ -10,7 +10,7 @@
 
     <color name="color_background">#FFFFFF</color>
     <color name="color_on_background">#000000</color>
-    <color name="color_surface">#E1E1E1</color>
+    <color name="color_surface">#F4F4F4</color>
     <color name="color_on_surface">#252525</color>
     <color name="color_error">#B00020</color>
     <color name="color_on_error">#FFFFFF</color>
@@ -18,7 +18,7 @@
     <color name="text_color_primary">#171717</color>
     <color name="text_color_secondary">#282828</color>
 
-    <color name="divider_color">#B4B4B4</color>
-    <color name="element_background_color">#CCCCCC</color>
+    <color name="divider_color">#D3D3D3</color>
+    <color name="element_background_color">#E4E4E4</color>
 
 </resources>

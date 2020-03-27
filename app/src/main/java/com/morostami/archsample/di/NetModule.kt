@@ -25,14 +25,6 @@ import javax.inject.Singleton
 
 @Module
 class NetModule {
-//    @Singleton
-//    @Provides
-//    fun provideHttpLoggingInterceptor() : HttpLoggingInterceptor {
-//        return HttpLoggingInterceptor().apply {
-//            level = HttpLoggingInterceptor.Level.BODY
-//        }
-//    }
-
     @Singleton
     @Provides
     fun okHttpCache(context: Context): Cache {

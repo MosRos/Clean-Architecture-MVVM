@@ -4,5 +4,16 @@
         <item name="cardElevation">@dimen/card_elevation</item>
         <item name="strokeWidth">@dimen/card_Stroke_width</item>
         <item name="strokeColor">@color/divider_color</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+    </style>
+    <style name="Widget.AS.Toolbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
+        <item name="android:background">?attr/colorSurface</item>
+    </style>
+
+    <style name="AppTheme.AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+        <!-- ColorPrimary corresponds to the color of a button in an alert dialog.-->
+        <item name="android:colorBackground">?attr/colorSurface</item>
+        <item name="colorPrimary">?attr/colorOnPrimary</item>
+        <item name="colorAccent">?attr/colorSecondary</item>
     </style>
 </resources>

@@ -3,7 +3,9 @@ package com.morostami.archsample
 import android.app.Application
 import android.util.Log
 import com.morostami.archsample.di.AppComponent
+import com.morostami.archsample.di.AppModule
 import com.morostami.archsample.di.DaggerAppComponent
+import com.morostami.archsample.ui.utils.PreferencesHelper
 import io.realm.Realm
 import org.jetbrains.annotations.NonNls
 import timber.log.Timber
@@ -13,11 +15,17 @@ open class MainApp : Application() {
 
     private lateinit var _mainAppp: MainApp
 
+    val appComponent: AppComponent by lazy {
+        DaggerAppComponent.builder()
+            .application(_mainAppp)
+            .build()
+    }
+
     override fun onCreate() {
         super.onCreate()
 
         _mainAppp = this
-
+        PreferencesHelper.init(this)
         initRealm(this)
 
         if (BuildConfig.DEBUG) {
@@ -25,10 +33,6 @@ open class MainApp : Application() {
         } else {
             Timber.plant(CrashReportingTree())
         }
-    }
-
-    val appComponent: AppComponent by lazy {
-        DaggerAppComponent.builder().application(_mainAppp).build()
     }
 
     private fun initRealm(appContext: Application) {

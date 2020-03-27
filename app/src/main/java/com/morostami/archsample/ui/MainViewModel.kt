@@ -8,6 +8,7 @@
 
 package com.morostami.archsample.ui
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CoinsListUseCase
@@ -29,6 +30,8 @@ class MainViewModel @Inject constructor(private val coinsListUseCase: CoinsListU
     private val _loading = MutableLiveData<LoadingState>()
     val loading: LiveData<LoadingState>
         get() = _loading
+
+    val fragName: ObservableField<String> = ObservableField("Home")
 
     var coinsList: LiveData<List<Coin>> = MutableLiveData(ArrayList())
 
