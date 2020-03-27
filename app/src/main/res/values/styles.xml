@@ -8,6 +8,12 @@
     </style>
     <style name="Widget.AS.Toolbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
         <item name="android:background">?attr/colorSurface</item>
+        <item name="elevation">8dp</item>
+    </style>
+
+    <style name="Widget.AS.AppBar" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:background">?attr/colorSurface</item>
+        <item name="elevation">8dp</item>
     </style>
 
     <style name="AppTheme.AlertDialogTheme" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">

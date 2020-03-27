@@ -27,12 +27,12 @@ class AppModule {
     @Singleton
     @Provides
     fun provideSharedPreferences(app: Application) : SharedPreferences {
-        return app.getSharedPreferences("arch_sample_app", Context.MODE_PRIVATE)
+        return app.getSharedPreferences("arch_sample", Context.MODE_PRIVATE)
     }
 
-//    @Singleton
-//    @Provides
-//    fun providePreferenceHelper(sharedPreferences: SharedPreferences) : PreferencesHelper {
-//        return PreferencesHelper(sharedPreferences)
-//    }
+    @Singleton
+    @Provides
+    fun providePreferenceHelper(sharedPreferences: SharedPreferences) : PreferencesHelper {
+        return PreferencesHelper(sharedPreferences)
+    }
 }

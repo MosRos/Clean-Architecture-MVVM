@@ -25,7 +25,6 @@ open class MainApp : Application() {
         super.onCreate()
 
         _mainAppp = this
-        PreferencesHelper.init(this)
         initRealm(this)
 
         if (BuildConfig.DEBUG) {

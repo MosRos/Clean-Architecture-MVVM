@@ -47,19 +47,24 @@ val THEME_ICON_MAPPINGS = mapOf(
 class MainActivity : AppCompatActivity() {
 
     lateinit var databinding: ActivityMainBinding
-
     lateinit var coinsComponent: CoinsComponent
-    @Inject
-    lateinit var mainViewModel: MainViewModel
     lateinit var themeDialog: AlertDialog
     var selectedTheme: Int = AppCompatDelegate.MODE_NIGHT_NO
+
+    @Inject
+    lateinit var mainViewModel: MainViewModel
+    @Inject
+    lateinit var preferencesHelper: PreferencesHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         coinsComponent = (application as MainApp).appComponent.coinsComponent().create()
         coinsComponent.injectMainActivity(this)
 
-        selectedTheme = PreferencesHelper.selectedThemeMode
+        selectedTheme = preferencesHelper.selectedThemeMode
         AppCompatDelegate.setDefaultNightMode(selectedTheme)
+        if (selectedTheme == 2){
+
+        }
         super.onCreate(savedInstanceState)
         databinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         databinding.lifecycleOwner = this
@@ -99,10 +104,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun applyTheme(selected: Int) {
         when (selected) {
-            0 -> PreferencesHelper.selectedThemeMode = 1
-            1 -> PreferencesHelper.selectedThemeMode = 2
-            2 -> PreferencesHelper.selectedThemeMode = -1
-            else -> PreferencesHelper.selectedThemeMode = -1
+            0 -> preferencesHelper.selectedThemeMode = 1
+            1 -> preferencesHelper.selectedThemeMode = 2
+            2 -> preferencesHelper.selectedThemeMode = -1
+            else -> preferencesHelper.selectedThemeMode = -1
         }
         themeDialog.dismiss()
         lifecycleScope.launch {

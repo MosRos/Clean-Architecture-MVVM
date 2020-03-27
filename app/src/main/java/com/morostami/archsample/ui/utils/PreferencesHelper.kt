@@ -13,7 +13,7 @@ import android.content.SharedPreferences
 import android.util.Log
 import javax.inject.Inject
 
-object PreferencesHelper {
+class PreferencesHelper @Inject constructor(private val preferences: SharedPreferences) {
 
     /**
      * SharedPreferences extension function, so we won't need to call edit()
@@ -27,18 +27,18 @@ object PreferencesHelper {
         editor.apply()
     }
 
-    private const val NAME = "NobatYaar"
-    private const val MODE = Context.MODE_PRIVATE
-    private lateinit var preferences: SharedPreferences
+//    private const val NAME = "NobatYaar"
+//    private const val MODE = Context.MODE_PRIVATE
+//    private lateinit var preferences: SharedPreferences
+//
+//    fun init(context: Context) {
+//        Log.e("PREFERENCES", "PREFERENCE INITIALIZED")
+//        preferences = context.getSharedPreferences(NAME, MODE)
+//    }
 
-    fun init(context: Context) {
-        Log.e("PREFERENCES", "PREFERENCE INITIALIZED")
-        preferences = context.getSharedPreferences(NAME, MODE)
-    }
-
-    fun getPreferences() : SharedPreferences {
-        return preferences
-    }
+//    fun getPreferences() : SharedPreferences {
+//        return preferences
+//    }
 
     private val SELECTED_THEME_MODE = Pair("theme-mode", 0)
     var selectedThemeMode: Int
