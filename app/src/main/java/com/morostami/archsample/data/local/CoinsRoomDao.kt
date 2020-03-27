@@ -7,20 +7,20 @@ import com.morostami.archsample.domain.model.Coin
 interface CoinsRoomDao : CoinsCRUD {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override fun insertCoins(coinsList: List<Coin>)
+    override suspend fun insertCoins(coinsList: List<Coin>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override fun insertCoin(coin: Coin)
+    override suspend fun insertCoin(coin: Coin)
 
     @Query("SELECT * FROM Coin")
-    override fun getAllCoins(): List<Coin>
+    override suspend fun getAllCoins(): List<Coin>
 
     @Query("SELECT * FROM Coin")
-    override fun getCoinsList(): List<Coin>
+    override suspend fun getCoinsList(): List<Coin>
 
     @Delete
-    override fun deletCoin(coin: Coin)
+    override suspend fun deletCoin(coin: Coin)
 
     @Delete
-    override fun deletCoins(coinsList: List<Coin>)
+    override suspend fun deletCoins(coinsList: List<Coin>)
 }

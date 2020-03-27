@@ -10,16 +10,16 @@ import com.morostami.archsample.domain.model.Coin
 
 interface CoinsCRUD {
 
-    fun insertCoins(coinsList: List<Coin>)
+    suspend fun insertCoins(coinsList: List<Coin>)
 
-    fun insertCoin(coin: Coin)
+    suspend fun insertCoin(coin: Coin)
 
-    fun getAllCoins() : List<Coin>
+    suspend fun getAllCoins() : List<Coin>
 
-    fun getCoinsList() : List<Coin>
+    suspend fun getCoinsList() : List<Coin>
 
-    fun deletCoin(coin: Coin)
+    suspend fun deletCoin(coin: Coin)
 
-    fun deletCoins(coinsList: List<Coin>)
+    suspend fun deletCoins(coinsList: List<Coin>)
 
 }

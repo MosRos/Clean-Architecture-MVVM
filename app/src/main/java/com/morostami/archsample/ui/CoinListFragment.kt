@@ -72,7 +72,8 @@ class CoinListFragment : Fragment() {
     }
 
     private fun initWidgets() {
-        val gridLM = GridLayoutManager(mContext, 2, RecyclerView.VERTICAL, false)
+        val noOfCulumns = resources.getInteger(R.integer.coins_grid_columns)
+        val gridLM = GridLayoutManager(mContext, noOfCulumns, RecyclerView.VERTICAL, false)
         coinsRecycler = dataBinding.coinsRecycler
         coinsRecycler.layoutManager = gridLM
 

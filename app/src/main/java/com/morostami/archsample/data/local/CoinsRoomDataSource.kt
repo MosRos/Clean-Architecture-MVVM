@@ -7,27 +7,27 @@ class CoinsRoomDataSource @Inject constructor(dataBase: CoinsRoomDataBase) : Coi
 
     private val coinsRoomDao: CoinsRoomDao = dataBase.coindDao()
 
-    override fun insertCoins(coinsList: List<Coin>) {
+    override suspend fun insertCoins(coinsList: List<Coin>) {
         coinsRoomDao.insertCoins(coinsList)
     }
 
-    override fun insertCoin(coin: Coin) {
+    override suspend fun insertCoin(coin: Coin) {
         coinsRoomDao.insertCoin(coin)
     }
 
-    override fun getAllCoins(): List<Coin> {
+    override suspend fun getAllCoins(): List<Coin> {
         return coinsRoomDao.getAllCoins()
     }
 
-    override fun getCoinsList(): List<Coin> {
+    override suspend fun getCoinsList(): List<Coin> {
         return coinsRoomDao.getCoinsList()
     }
 
-    override fun deletCoin(coin: Coin) {
+    override suspend fun deletCoin(coin: Coin) {
         coinsRoomDao.deletCoin(coin)
     }
 
-    override fun deletCoins(coinsList: List<Coin>) {
+    override suspend fun deletCoins(coinsList: List<Coin>) {
         coinsRoomDao.deletCoins(coinsList)
     }
 }

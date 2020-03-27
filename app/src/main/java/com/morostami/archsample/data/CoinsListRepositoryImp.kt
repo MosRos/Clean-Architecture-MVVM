@@ -36,7 +36,7 @@ class CoinsListRepositoryImpl @Inject constructor(
                 limit: Int,
                 offset: Int
             ): List<Coin>? {
-                return fetchFromDb().subList(0, 800)
+                return fetchFromDb()
             }
 
             override suspend fun validateCache(cachedData: List<Coin>?): Boolean {
@@ -55,9 +55,10 @@ class CoinsListRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchFromDb() : List<Coin> {
-        val coinsResult: List<Coin> = GlobalScope.async(Dispatchers.IO) {
-            coinsRoomDataSource.getCoinsList()
-        }.await()
+//        val coinsResult: List<Coin> = GlobalScope.async(Dispatchers.IO) {
+//            coinsRoomDataSource.getCoinsList()
+//        }.await()
+        val coinsResult: List<Coin> = coinsRoomDataSource.getCoinsList()
         Timber.e(coinsResult.size.toString())
         return coinsResult
     }
@@ -74,8 +75,9 @@ class CoinsListRepositoryImpl @Inject constructor(
 
     suspend fun saveCoins(coins: List<Coin>) {
         Timber.e("Coins To Insert In DB ${coins.size}")
-        GlobalScope.async(Dispatchers.IO) {
-            coinsRoomDataSource.insertCoins(coins)
-        }
+//        GlobalScope.async(Dispatchers.IO) {
+//            coinsRoomDataSource.insertCoins(coins)
+//        }
+        coinsRoomDataSource.insertCoins(coins)
     }
 }

@@ -18,7 +18,7 @@ class CoinsRealmDataSource @Inject constructor(coinConfig: RealmConfiguration) :
 
     private val coinsRealm: Realm = Realm.getInstance(coinConfig)
 
-    override fun insertCoins(coinsList: List<Coin>) {
+    override suspend fun insertCoins(coinsList: List<Coin>) {
         coinsRealm.use {
             try {
                 coinsRealm.executeTransactionAsync({coinsRealm ->
@@ -34,7 +34,7 @@ class CoinsRealmDataSource @Inject constructor(coinConfig: RealmConfiguration) :
         }
     }
 
-    override fun insertCoin(coin: Coin) {
+    override suspend fun insertCoin(coin: Coin) {
         coinsRealm.use {
             try {
                 coinsRealm.executeTransaction {coinsRealm ->
@@ -46,19 +46,19 @@ class CoinsRealmDataSource @Inject constructor(coinConfig: RealmConfiguration) :
         }
     }
 
-    override fun getAllCoins(): List<Coin> {
+    override suspend fun getAllCoins(): List<Coin> {
         coinsRealm.use {
             return coinsRealm.where(Coin::class.java).findAllAsync()
         }
     }
 
-    override fun getCoinsList(): List<Coin> {
+    override suspend fun getCoinsList(): List<Coin> {
         return coinsRealm.where(Coin::class.java)
             .limit(100)
             .findAllAsync()
     }
 
-    override fun deletCoin(coin: Coin) {
+    override suspend fun deletCoin(coin: Coin) {
         coinsRealm.use {
             coinsRealm.executeTransaction{coinsRealm ->
                 try {
@@ -70,7 +70,7 @@ class CoinsRealmDataSource @Inject constructor(coinConfig: RealmConfiguration) :
         }
     }
 
-    override fun deletCoins(coinsList: List<Coin>) {
+    override suspend fun deletCoins(coinsList: List<Coin>) {
         coinsRealm.executeTransaction {
             for (coin in coinsList) {
                 try {
