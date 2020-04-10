@@ -3,11 +3,13 @@ package com.morostami.archsample.data.local
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.morostami.archsample.domain.model.Coin
+import com.morostami.archsample.domain.model.RankedCoin
 
-@Database(entities = arrayOf(Coin::class), version = 1, exportSchema = false)
+@Database(entities = [Coin::class, RankedCoin::class], version = 2, exportSchema = false)
 abstract class CoinsRoomDataBase : RoomDatabase() {
 
-    abstract fun coindDao() : CoinsRoomDao
+    abstract fun coinDao() : CoinsRoomDao
+    abstract fun cryptoMarketDao() : CryptoMarketDao
 //    companion object {
 //        @Volatile private var INSTANCE: CoinsRoomDataBase? = null
 //        private const val db_name = "coins_db"

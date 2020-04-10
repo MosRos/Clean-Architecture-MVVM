@@ -12,6 +12,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CoinsListUseCase
+import com.morostami.archsample.domain.CryptoMarketUseCase
 import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.utils.LoadingState
 import com.morostami.archsample.utils.Resource
@@ -66,7 +67,7 @@ class MainViewModel @Inject constructor(private val coinsListUseCase: CoinsListU
                 when(coinsRes) {
                     is Resource.Success -> {
                         Timber.e(coinsRes.invoke().size.toString())
-                        emit(coinsRes.invoke()!!)
+                        emit(coinsRes.invoke())
                         setLoadingState(LoadingState.LOADED)
                     }
                     is Resource.Error<*, *> -> {

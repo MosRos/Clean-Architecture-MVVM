@@ -25,6 +25,7 @@ import javax.inject.Singleton
 
 @Module
 class NetModule {
+    private val BASE_URL: String = "https://api.coingecko.com/api/v3/"
     @Singleton
     @Provides
     fun okHttpCache(context: Context): Cache {
@@ -62,7 +63,7 @@ class NetModule {
     fun provideRetrofit(@NonNull httoClient: OkHttpClient) : Retrofit {
         return Retrofit.Builder()
             .client(httoClient)
-            .baseUrl("https://api.coingecko.com/api/v3/")
+            .baseUrl(BASE_URL)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .build()

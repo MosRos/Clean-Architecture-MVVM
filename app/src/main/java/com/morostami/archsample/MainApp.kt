@@ -3,9 +3,7 @@ package com.morostami.archsample
 import android.app.Application
 import android.util.Log
 import com.morostami.archsample.di.AppComponent
-import com.morostami.archsample.di.AppModule
 import com.morostami.archsample.di.DaggerAppComponent
-import com.morostami.archsample.ui.utils.PreferencesHelper
 import io.realm.Realm
 import org.jetbrains.annotations.NonNls
 import timber.log.Timber
@@ -23,7 +21,6 @@ open class MainApp : Application() {
 
     override fun onCreate() {
         super.onCreate()
-
         _mainAppp = this
         initRealm(this)
 

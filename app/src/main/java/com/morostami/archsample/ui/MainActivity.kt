@@ -9,26 +9,26 @@
 package com.morostami.archsample.ui
 
 import android.content.DialogInterface
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.ui.NavigationUI
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.morostami.archsample.MainApp
 import com.morostami.archsample.R
+import com.morostami.archsample.data.prefs.PreferencesHelper
 import com.morostami.archsample.databinding.ActivityMainBinding
 import com.morostami.archsample.di.CoinsComponent
-import com.morostami.archsample.ui.utils.PreferencesHelper
-import com.morostami.archsample.ui.utils.booleanLiveData
-import com.morostami.archsample.ui.utils.intLiveData
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -46,10 +46,13 @@ val THEME_ICON_MAPPINGS = mapOf(
 
 class MainActivity : AppCompatActivity() {
 
-    lateinit var databinding: ActivityMainBinding
+    private lateinit var databinding: ActivityMainBinding
     lateinit var coinsComponent: CoinsComponent
-    lateinit var themeDialog: AlertDialog
-    var selectedTheme: Int = AppCompatDelegate.MODE_NIGHT_NO
+    private lateinit var bottomNav: BottomNavigationView
+    private lateinit var navController: NavController
+
+    private lateinit var themeDialog: AlertDialog
+    private var selectedTheme: Int = AppCompatDelegate.MODE_NIGHT_NO
 
     @Inject
     lateinit var mainViewModel: MainViewModel
@@ -69,8 +72,22 @@ class MainActivity : AppCompatActivity() {
         databinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         databinding.lifecycleOwner = this
         databinding.viewmodel = mainViewModel
+
+        initBottomNavAndController()
         setObservers()
         setListeners()
+    }
+
+    private fun initBottomNavAndController() {
+        bottomNav = databinding.bottomNavView
+        navController = Navigation.findNavController(this, R.id.nav_host_container)
+        NavigationUI.setupWithNavController(bottomNav, navController)
+
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            if (destination.label != null) {
+                mainViewModel.fragName.set(destination.label.toString())
+            }
+        }
     }
 
     private fun setObservers() {

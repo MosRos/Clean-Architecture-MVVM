@@ -6,7 +6,7 @@
  *
  */
 
-package com.morostami.archsample.ui.utils
+package com.morostami.archsample.data.prefs
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -26,19 +26,6 @@ class PreferencesHelper @Inject constructor(private val preferences: SharedPrefe
         operation(editor)
         editor.apply()
     }
-
-//    private const val NAME = "NobatYaar"
-//    private const val MODE = Context.MODE_PRIVATE
-//    private lateinit var preferences: SharedPreferences
-//
-//    fun init(context: Context) {
-//        Log.e("PREFERENCES", "PREFERENCE INITIALIZED")
-//        preferences = context.getSharedPreferences(NAME, MODE)
-//    }
-
-//    fun getPreferences() : SharedPreferences {
-//        return preferences
-//    }
 
     private val SELECTED_THEME_MODE = Pair("theme-mode", 0)
     var selectedThemeMode: Int

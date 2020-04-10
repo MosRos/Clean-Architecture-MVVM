@@ -11,14 +11,9 @@ package com.morostami.archsample.di
 import android.app.Application
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.room.Room
-import com.morostami.archsample.MainApp
-import com.morostami.archsample.data.local.CoinsRoomDao
-import com.morostami.archsample.data.local.CoinsRoomDataBase
-import com.morostami.archsample.ui.utils.PreferencesHelper
+import com.morostami.archsample.data.prefs.PreferencesHelper
 import dagger.Module
 import dagger.Provides
-import io.realm.RealmConfiguration
 import javax.inject.Singleton
 
 
@@ -33,6 +28,8 @@ class AppModule {
     @Singleton
     @Provides
     fun providePreferenceHelper(sharedPreferences: SharedPreferences) : PreferencesHelper {
-        return PreferencesHelper(sharedPreferences)
+        return PreferencesHelper(
+            sharedPreferences
+        )
     }
 }

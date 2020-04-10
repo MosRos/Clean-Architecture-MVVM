@@ -16,6 +16,9 @@
             android:layout_margin="3dp"
             app:cardPreventCornerOverlap="true"
             app:cardUseCompatPadding="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
             style="@style/Widget.AS.CardView">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"

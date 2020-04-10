@@ -1,12 +1,12 @@
 /*
  * *
- *  * Created by Moslem Rostami on 3/27/20 1:36 AM
+ *  * Created by Moslem Rostami on 4/8/20 11:44 AM
  *  * Copyright (c) 2020 . All rights reserved.
- *  * Last modified 2/12/20 10:17 PM
+ *  * Last modified 3/27/20 1:36 AM
  *
  */
 
-package com.morostami.archsample.ui.utils
+package com.morostami.archsample.data.prefs
 
 import android.content.SharedPreferences
 import androidx.lifecycle.LiveData

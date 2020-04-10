@@ -11,11 +11,11 @@ package com.morostami.archsample.di
 import android.app.Application
 import androidx.room.Room
 import com.morostami.archsample.data.CoinsListRepositoryImpl
+import com.morostami.archsample.data.CryptoMarketRepositoryImpl
 import com.morostami.archsample.data.api.CoinGeckoService
-import com.morostami.archsample.data.local.CoinsRoomDao
-import com.morostami.archsample.data.local.CoinsRoomDataBase
-import com.morostami.archsample.data.local.CoinsRoomDataSource
+import com.morostami.archsample.data.local.*
 import com.morostami.archsample.domain.CoinsListRepository
+import com.morostami.archsample.domain.CryptoMarketRepository
 import dagger.Module
 import dagger.Provides
 import io.realm.RealmConfiguration
@@ -33,7 +33,13 @@ class DataModule {
     @Singleton
     @Provides
     fun provideCoinsRoomDao(coinsRoomDataBase: CoinsRoomDataBase) : CoinsRoomDao {
-        return coinsRoomDataBase.coindDao()
+        return coinsRoomDataBase.coinDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCryptoMarketDao(coinsRoomDataBase: CoinsRoomDataBase) : CryptoMarketDao {
+        return coinsRoomDataBase.cryptoMarketDao()
     }
 
     @Singleton
@@ -50,5 +56,11 @@ class DataModule {
     @Provides
     fun provideCoinsListRepository(coinGeckoService: CoinGeckoService,  coinsRoomDataSource: CoinsRoomDataSource) : CoinsListRepository {
         return CoinsListRepositoryImpl(coinGeckoService, coinsRoomDataSource)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCryptoMarketRepository(cryptoLocalDataSource: CryptoLocalDataSource, coinGeckoService: CoinGeckoService) : CryptoMarketRepository {
+        return CryptoMarketRepositoryImpl(cryptoLocalDataSource, coinGeckoService)
     }
 }
