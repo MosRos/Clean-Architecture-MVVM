@@ -1,3 +1,10 @@
+<p float="left">
+<img src="screenshots/home_dark.jpg" width="30%"/>
+<img src="screenshots/home_light.jpg" width="30%"/>
+<img src="screenshots/search_light.jpg" width="30%"/>
+</p>
+
+
 #### Android Arch Sample
 A Sample app for implementing Clean Architecture with MVVM and Repository pattern using jetpack libraries.
 It is a simple app, gets list of cryptocurrency coins from coingecko api, save to database and show to user.
