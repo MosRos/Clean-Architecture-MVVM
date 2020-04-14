@@ -51,7 +51,7 @@
                 android:layout_height="0dp"
                 style="@style/TextAppearance.CoinSymbol"
                 android:background="@android:color/transparent"
-                android:text="@{rankedCoin.symbol}"
+                android:text="@{rankedCoin.symbol.toUpperCase()}"
                 android:singleLine="true"
                 app:layout_constraintStart_toEndOf="@id/coinImg"
                 app:layout_constraintEnd_toStartOf="@id/currentPriceTxt"

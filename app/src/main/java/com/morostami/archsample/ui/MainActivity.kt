@@ -11,6 +11,7 @@ package com.morostami.archsample.ui
 import android.content.DialogInterface
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -86,6 +87,12 @@ class MainActivity : AppCompatActivity() {
         navController.addOnDestinationChangedListener { controller, destination, arguments ->
             if (destination.label != null) {
                 mainViewModel.fragName.set(destination.label.toString())
+            }
+
+            if (destination.id == R.id.navigation_search){
+                databinding.appBarLayout.visibility = View.GONE
+            } else {
+                databinding.appBarLayout.visibility = View.VISIBLE
             }
         }
     }

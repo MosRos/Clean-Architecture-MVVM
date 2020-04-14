@@ -19,6 +19,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -52,6 +54,20 @@ class CoinsListRepositoryImpl @Inject constructor(
             }
         }.flow()
 
+    }
+
+    override fun searchCoins(searchInput: String): Flow<Resource<List<Coin>>> {
+        return flow() {
+            val results: List<Coin> = localSearchCoins(searchInput)
+            Timber.e("search results size ${results.size}")
+            emit(Resource.Success(localSearchCoins(searchInput)))
+        }
+    }
+
+    private suspend fun localSearchCoins(input: String) : List<Coin> {
+        return GlobalScope.async(Dispatchers.IO){
+            coinsRoomDataSource.searchCoins(input)
+        }.await()
     }
 
     private suspend fun fetchFromDb() : List<Coin> {

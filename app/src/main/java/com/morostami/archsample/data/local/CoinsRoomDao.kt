@@ -18,6 +18,9 @@ interface CoinsRoomDao : CoinsCRUD {
     @Query("SELECT * FROM Coin")
     override suspend fun getCoinsList(): List<Coin>
 
+    @Query("SELECT * FROM Coin WHERE symbol LIKE :input || '%' OR name LIKE :input")
+    suspend fun searchCoins(input: String): List<Coin>
+
     @Delete
     override suspend fun deletCoin(coin: Coin)
 

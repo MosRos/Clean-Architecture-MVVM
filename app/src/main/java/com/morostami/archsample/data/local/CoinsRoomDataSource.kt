@@ -28,4 +28,6 @@ class CoinsRoomDataSource @Inject constructor(private val coinsRoomDao: CoinsRoo
     override suspend fun deletCoins(coinsList: List<Coin>) {
         coinsRoomDao.deletCoins(coinsList)
     }
+
+    suspend fun searchCoins(searchQuery: String) = coinsRoomDao.searchCoins(searchQuery)
 }

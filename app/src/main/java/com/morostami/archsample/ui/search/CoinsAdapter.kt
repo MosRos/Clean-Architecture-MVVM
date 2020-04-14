@@ -1,12 +1,12 @@
 /*
  * *
- *  * Created by Moslem Rostami on 3/26/20 1:13 AM
+ *  * Created by Moslem Rostami on 4/14/20 9:15 AM
  *  * Copyright (c) 2020 . All rights reserved.
- *  * Last modified 3/26/20 1:13 AM
+ *  * Last modified 3/26/20 11:35 PM
  *
  */
 
-package com.morostami.archsample.ui
+package com.morostami.archsample.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

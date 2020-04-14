@@ -17,4 +17,8 @@ class CoinsListUseCase @Inject constructor(private val coinsListRepository: Coin
     fun getCoinsList(): Flow<Resource<List<Coin>>> {
         return coinsListRepository.getCoins()
     }
+
+    fun searchCoins(inputQuery: String) : Flow<Resource<List<Coin>>> {
+        return coinsListRepository.searchCoins(inputQuery)
+    }
 }

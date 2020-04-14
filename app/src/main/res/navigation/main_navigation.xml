@@ -6,9 +6,9 @@
         app:startDestination="@id/navigation_home">
     <fragment
             android:id="@+id/navigation_search"
-            android:name="com.morostami.archsample.ui.CoinListFragment"
+            android:name="com.morostami.archsample.ui.search.CoinSearchFragment"
             android:label="@string/title_search"
-            tools:layout="@layout/fragment_coins_list" />
+            tools:layout="@layout/fragment_coins_search" />
     <fragment
             android:id="@+id/navigation_home"
             android:name="com.morostami.archsample.ui.marketrank.MarketRankFragment"

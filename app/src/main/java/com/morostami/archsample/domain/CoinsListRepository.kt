@@ -1,8 +1,8 @@
 /*
  * *
- *  * Created by Moslem Rostami on 3/24/20 12:23 PM
+ *  * Created by Moslem Rostami on 4/14/20 9:21 AM
  *  * Copyright (c) 2020 . All rights reserved.
- *  * Last modified 3/24/20 12:23 PM
+ *  * Last modified 4/14/20 9:21 AM
  *
  */
 
@@ -14,4 +14,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CoinsListRepository {
     fun getCoins() : Flow<Resource<List<Coin>>>
+    fun searchCoins(searchInput: String) : Flow<Resource<List<Coin>>>
 }
