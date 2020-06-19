@@ -30,7 +30,12 @@ class CryptoMarketRepositoryImpl @Inject constructor(
     private val defaultOffset = 0
 
     override fun getRanks(): Flow<Resource<List<RankedCoin>>> {
-        return object : NetworkBoundResource<List<RankedCoin>, List<RankedCoin>, CoinGeckoApiError>(){
+        return object : NetworkBoundResource<List<RankedCoin>, List<RankedCoin>, CoinGeckoApiError>() {
+
+            init {
+                updateParams(defaultLimit, defaultOffset)
+            }
+
             override suspend fun getFromDatabase(
                 isRefreshed: Boolean,
                 limit: Int,
@@ -53,14 +58,62 @@ class CryptoMarketRepositoryImpl @Inject constructor(
         }.flow()
     }
 
+    override fun getBookMarks(): Flow<Resource<List<RankedCoin>>> {
+        return object : NetworkBoundResource<List<RankedCoin>, List<RankedCoin>, CoinGeckoApiError>(){
+            var bookmarkedIds: ArrayList<String> = ArrayList()
+
+            override suspend fun getFromDatabase(
+                isRefreshed: Boolean,
+                limit: Int,
+                offset: Int
+            ): List<RankedCoin>? {
+                val bookmarks: List<RankedCoin>? = loadBookMarksFromDB()
+                bookmarks?.apply {
+                    for (bookmark in bookmarks){
+                        bookmarkedIds.add(bookmark.id)
+                    }
+                }
+                return bookmarks
+            }
+
+            override suspend fun validateCache(cachedData: List<RankedCoin>?): Boolean {
+                return !cachedData.isNullOrEmpty()
+            }
+
+            override suspend fun getFromApi(): NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
+                return fetchBookMarksFromNetwork(bookmarkedIds)
+            }
+
+            override suspend fun persistData(apiData: List<RankedCoin>) {
+                saveRanks(apiData)
+            }
+        }.flow()
+    }
+
     private suspend fun loadFromDB() : List<RankedCoin> {
         val dbResult: List<RankedCoin> = cryptoLocalDataSource.getAllRankedCoins()
         Timber.e("Market DB Result is ${dbResult.size}")
         return dbResult
     }
 
+    private suspend fun loadBookMarksFromDB() : List<RankedCoin> {
+        val dbResult: List<RankedCoin> = cryptoLocalDataSource.getBookMarkedList()
+        Timber.e("Market DB Result is ${dbResult.size}")
+        return dbResult
+    }
+
     private suspend fun fetchFromNetwork() : NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
         val apiResult = coinGeckoService.getMarketRanks("usd")
+        when(apiResult){
+            is NetworkResponse.Success -> Timber.e(apiResult.body.size.toString())
+            is NetworkResponse.NetworkError -> Timber.e(apiResult.error.toString())
+            is NetworkResponse.ServerError -> Timber.e(apiResult.body.toString())
+        }
+        return apiResult
+    }
+
+    private suspend fun fetchBookMarksFromNetwork(ids: List<String>) : NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
+        val apiResult = coinGeckoService.getBookMarks("usd", ids)
         when(apiResult){
             is NetworkResponse.Success -> Timber.e(apiResult.body.size.toString())
             is NetworkResponse.NetworkError -> Timber.e(apiResult.error.toString())

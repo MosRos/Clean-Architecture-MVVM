@@ -8,6 +8,8 @@
 
 package com.morostami.archsample.data.local
 
+import androidx.annotation.NonNull
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
@@ -28,9 +30,21 @@ interface CryptoMarketDao {
     @Query("SELECT * FROM RankedCoin")
     suspend fun getRankedCoinsList(): List<RankedCoin>
 
+    @Query("SELECT * FROM RankedCoin ORDER BY marketCapRank ASC")
+    fun getPagedRankedCoins(): PagingSource<Int, RankedCoin>
+
     @Delete
     suspend fun deleteRankedCoin(rankedCoin: RankedCoin)
 
     @Delete
     suspend fun deleteRankedCoins(coinsList: List<RankedCoin>)
+
+    @Query("DELETE FROM RankedCoin")
+    suspend fun deleteAllRankedCoins()
+
+    @Query("UPDATE RankedCoin SET isBookMarked = :bookmark_it WHERE id = :coinId")
+    suspend fun bookmarkCoin(coinId: String, bookmark_it: Boolean = true)
+
+    @Query("SELECT * FROM RankedCoin WHERE isbookmarked = 1")
+    suspend fun getBookMarkedList() : List<RankedCoin>
 }

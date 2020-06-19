@@ -32,20 +32,20 @@
 
         <item name="as_dividerColor">@color/divider_color</item>
         <item name="as_elementBackgroundColor">@color/element_background_color</item>
-        <item name="android:statusBarColor">@color/element_background_color</item>
+        <item name="android:statusBarColor">@color/color_surface</item>
 <!--        <item name="android:windowLightStatusBar">false</item>-->
         <item name="android:overScrollMode">never</item>
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">
-            @android:color/transparent
+            @color/color_surface
         </item>
     </style>
 
 
 
     <style name="Base.MaterialThemeBuilder" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <item name="android:statusBarColor">?colorSurface</item>
+        <item name="android:statusBarColor">@color/color_surface</item>
 <!--        <item name="android:windowLightStatusBar">true</item>-->
-        <item name="android:navigationBarColor">?colorSurface</item>
+        <item name="android:navigationBarColor">@color/color_surface</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">true</item>
         <item name="android:navigationBarDividerColor" tools:ignore="NewApi">?colorControlHighlight
         </item>

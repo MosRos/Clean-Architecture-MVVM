@@ -9,13 +9,12 @@
 package com.morostami.archsample.ui.marketrank
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.databinding.ListItemRankedCoinBinding
 import com.morostami.archsample.domain.model.RankedCoin
 
-class RankedCoinAdapter(private val onRankedCoinClick: OnRankedCoinClick) : RecyclerView.Adapter<RankedCoinAdapter.RankedCoinViewHolder>() {
+class RankedCoinAdapter(private val onRankedCoinClick: OnRankedCoinClick) : RecyclerView.Adapter<RankedCoinViewHolder>() {
     private var coinsList: List<RankedCoin> = ArrayList()
 
     fun setCoinsList(coins: List<RankedCoin>) {
@@ -38,15 +37,4 @@ class RankedCoinAdapter(private val onRankedCoinClick: OnRankedCoinClick) : Recy
         holder.bind(coin, position, onRankedCoinClick)
         holder.databinding.executePendingBindings()
     }
-
-    inner class RankedCoinViewHolder(val databinding: ListItemRankedCoinBinding) : RecyclerView.ViewHolder(databinding.rootLayout) {
-        val rootLayout: View = databinding.rootLayout
-
-        fun bind(rankedCoin: RankedCoin, position: Int, onRankedCoinClick: OnRankedCoinClick) {
-            rootLayout.setOnClickListener {
-                onRankedCoinClick.onItemClicked(rankedCoin, position)
-            }
-        }
-    }
-
 }

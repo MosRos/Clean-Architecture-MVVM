@@ -11,12 +11,12 @@
             tools:layout="@layout/fragment_coins_search" />
     <fragment
             android:id="@+id/navigation_home"
-            android:name="com.morostami.archsample.ui.marketrank.MarketRankFragment"
+            android:name="com.morostami.archsample.ui.marketrank.MarketRanksFragment"
             android:label="@string/title_market"
             tools:layout="@layout/fragment_market_rank" />
     <fragment
             android:id="@+id/navigation_market"
-            android:name="com.morostami.archsample.ui.marketrank.MarketRankFragment"
+            android:name="com.morostami.archsample.ui.marketrank.MarketRanksFragment"
             android:label="@string/title_market"
             tools:layout="@layout/fragment_market_rank" />
 
