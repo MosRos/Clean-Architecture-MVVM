@@ -9,17 +9,13 @@
 package com.morostami.archsample.di
 
 import android.app.Application
-import androidx.paging.ExperimentalPagingApi
 import androidx.room.Room
 import com.morostami.archsample.data.CoinsListRepositoryImpl
 import com.morostami.archsample.data.CryptoMarketRepositoryImpl
-import com.morostami.archsample.data.MarketRanksMediator
-import com.morostami.archsample.data.MarketRanksRepositoryImpl
 import com.morostami.archsample.data.api.CoinGeckoService
 import com.morostami.archsample.data.local.*
 import com.morostami.archsample.domain.CoinsListRepository
 import com.morostami.archsample.domain.CryptoMarketRepository
-import com.morostami.archsample.domain.MarketRanksRepository
 import dagger.Module
 import dagger.Provides
 import io.realm.RealmConfiguration
@@ -48,12 +44,6 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideRemoteKeysDao(coinsRoomDataBase: CoinsRoomDataBase) : RemoteKeysDao {
-        return coinsRoomDataBase.remoteKeysDao()
-    }
-
-    @Singleton
-    @Provides
     fun provideCryptocurrencyConfig() : RealmConfiguration {
         return RealmConfiguration.Builder()
             .name("cryptocurrency.realm")
@@ -72,15 +62,5 @@ class DataModule {
     @Provides
     fun provideCryptoMarketRepository(cryptoLocalDataSource: CryptoLocalDataSource, coinGeckoService: CoinGeckoService) : CryptoMarketRepository {
         return CryptoMarketRepositoryImpl(cryptoLocalDataSource, coinGeckoService)
-    }
-
-    @OptIn(ExperimentalPagingApi::class)
-    @Singleton
-    @Provides
-    fun provideMarketRanksRepository(cryptoLocalDataSource: CryptoLocalDataSource,
-                                     coinGeckoService: CoinGeckoService,
-                                     marketRanksMediator: MarketRanksMediator
-    ) : MarketRanksRepository {
-        return MarketRanksRepositoryImpl(cryptoLocalDataSource, coinGeckoService, marketRanksMediator)
     }
 }

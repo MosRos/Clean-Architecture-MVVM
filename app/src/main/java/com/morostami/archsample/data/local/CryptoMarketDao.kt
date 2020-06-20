@@ -8,8 +8,6 @@
 
 package com.morostami.archsample.data.local
 
-import androidx.annotation.NonNull
-import androidx.paging.PagingSource
 import androidx.room.*
 import com.morostami.archsample.domain.model.RankedCoin
 
@@ -23,14 +21,11 @@ interface CryptoMarketDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertRankedCoin(rankedCoin: RankedCoin)
 
-    @Query("SELECT * FROM RankedCoin")
+    @Query("SELECT * FROM RankedCoin ORDER BY marketCapRank ASC")
     suspend fun getAllRankedCoins(): List<RankedCoin>
 
     @Query("SELECT * FROM RankedCoin")
     suspend fun getRankedCoinsList(): List<RankedCoin>
-
-    @Query("SELECT * FROM RankedCoin ORDER BY marketCapRank ASC")
-    fun getPagedRankedCoins(): PagingSource<Int, RankedCoin>
 
     @Delete
     suspend fun deleteRankedCoin(rankedCoin: RankedCoin)
