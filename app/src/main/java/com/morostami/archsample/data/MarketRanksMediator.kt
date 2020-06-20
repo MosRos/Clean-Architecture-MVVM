@@ -12,14 +12,15 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.withTransaction
 import com.morostami.archsample.data.api.CoinGeckoService
-import com.morostami.archsample.data.local.CoinsRoomDataBase
 import com.morostami.archsample.data.local.CryptoLocalDataSource
 import com.morostami.archsample.domain.model.CoinsRemoteKeys
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.utils.NetworkUtils
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -34,6 +35,8 @@ const val PAGE_SIZE = 50
 class MarketRanksMediator @Inject constructor(
     private val cryptoLocalDataSource: CryptoLocalDataSource,
     private val coinGeckoService: CoinGeckoService) : RemoteMediator<Int, RankedCoin>() {
+
+    override suspend fun initialize(): InitializeAction = RemoteMediator.InitializeAction.LAUNCH_INITIAL_REFRESH
 
     override suspend fun load(
         loadType: LoadType,

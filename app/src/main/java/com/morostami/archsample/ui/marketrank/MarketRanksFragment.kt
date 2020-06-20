@@ -16,7 +16,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,7 +24,7 @@ import com.morostami.archsample.R
 import com.morostami.archsample.databinding.FragmentMarketRankBinding
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.ui.MainActivity
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -71,7 +70,7 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
     private fun setObservers() {
         Timber.e("Start Observing values")
         viewLifecycleOwner.lifecycleScope.launch {
-            marketViewModel.getPagedRankedCoins().collectLatest{
+            marketViewModel.getPagedRankedCoins().collect{
                 it?.let {
                     updateRanksAdapter(it)
                 }
@@ -89,10 +88,10 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
     }
 
     private fun updateRanksAdapter(coins: PagingData<RankedCoin>) {
-        dataBinding.progressBar.visibility = View.GONE
         viewLifecycleOwner.lifecycleScope.launch {
             marketRanksAdapter.submitData(coins)
         }
+        dataBinding.progressBar.visibility = View.GONE
     }
 
     override fun onItemClicked(rankedCoin: RankedCoin, position: Int) {

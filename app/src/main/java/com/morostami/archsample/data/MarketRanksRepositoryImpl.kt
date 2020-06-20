@@ -8,15 +8,15 @@
 
 package com.morostami.archsample.data
 
-import androidx.paging.*
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.morostami.archsample.data.api.CoinGeckoService
 import com.morostami.archsample.data.local.CryptoLocalDataSource
 import com.morostami.archsample.domain.MarketRanksRepository
 import com.morostami.archsample.domain.model.RankedCoin
-import com.morostami.archsample.utils.Resource
-import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
 
@@ -30,8 +30,9 @@ class MarketRanksRepositoryImpl @Inject constructor(
 
         val pagingSourceFactory = { cryptoLocalDataSource.getPagedRankedCoins() }
         return Pager(
-            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 15),
+            config = PagingConfig(pageSize = PAGE_SIZE, prefetchDistance = 15, enablePlaceholders = true, initialLoadSize = 100, maxSize = 200),
             remoteMediator = marketRanksMediator,
+            initialKey = 1,
             pagingSourceFactory = pagingSourceFactory
         ).flow
     }
