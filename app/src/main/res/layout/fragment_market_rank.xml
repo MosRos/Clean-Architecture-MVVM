@@ -8,9 +8,9 @@
         <variable
                 name="marketViewModel"
                 type="com.morostami.archsample.ui.marketrank.MarketViewModel" />
-        <variable
-                name="rankAdapter"
-                type="com.morostami.archsample.ui.marketrank.RankedCoinAdapter" />
+<!--        <variable-->
+<!--                name="rankAdapter"-->
+<!--                type="com.morostami.archsample.ui.marketrank.RankedCoinAdapter" />-->
     </data>
     <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/root_layout"

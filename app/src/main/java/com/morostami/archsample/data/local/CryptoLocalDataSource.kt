@@ -8,32 +8,41 @@
 
 package com.morostami.archsample.data.local
 
+import androidx.paging.PagingSource
+import com.morostami.archsample.domain.model.CoinsRemoteKeys
 import com.morostami.archsample.domain.model.RankedCoin
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class CryptoLocalDataSource @Inject constructor(private val cryptoMarketDao: CryptoMarketDao) {
+class CryptoLocalDataSource @Inject constructor(
+    private val cryptoMarketDao: CryptoMarketDao,
+    private val remoteKeysDao: RemoteKeysDao) {
     // RankedCoins
-    suspend fun insertRankedCoins(coinsList: List<RankedCoin>){
-        cryptoMarketDao.insertRankedCoins(coinsList)
-    }
+    suspend fun insertRankedCoins(coinsList: List<RankedCoin>) = cryptoMarketDao.insertRankedCoins(coinsList)
 
-    suspend fun insertRankedCoin(rankedCoin: RankedCoin){
-        cryptoMarketDao.insertRankedCoin(rankedCoin)
-    }
+    suspend fun insertRankedCoin(rankedCoin: RankedCoin) = cryptoMarketDao.insertRankedCoin(rankedCoin)
 
-    suspend fun getAllRankedCoins(): List<RankedCoin>{
-        return cryptoMarketDao.getAllRankedCoins()
-    }
+    suspend fun getAllRankedCoins(): List<RankedCoin> = cryptoMarketDao.getAllRankedCoins()
 
-    suspend fun getRankedCoinsList(): List<RankedCoin>{
-        return cryptoMarketDao.getRankedCoinsList()
-    }
+    suspend fun getRankedCoinsList(): List<RankedCoin> = cryptoMarketDao.getRankedCoinsList()
 
-    suspend fun deleteRankedCoin(rankedCoin: RankedCoin){
-        cryptoMarketDao.deleteRankedCoin(rankedCoin)
-    }
+    fun getPagedRankedCoins(): PagingSource<Int, RankedCoin> = cryptoMarketDao.getPagedRankedCoins()
 
-    suspend fun deleteRankedCoins(coinsList: List<RankedCoin>){
-        cryptoMarketDao.deleteRankedCoins(coinsList)
-    }
+    suspend fun deleteRankedCoin(rankedCoin: RankedCoin) = cryptoMarketDao.deleteRankedCoin(rankedCoin)
+
+    suspend fun deleteRankedCoins(coinsList: List<RankedCoin>) = cryptoMarketDao.deleteRankedCoins(coinsList)
+
+    suspend fun deleteAllRankedCoins() = cryptoMarketDao.deleteAllRankedCoins()
+
+    suspend fun bookmarkCoin(rankedCoin: RankedCoin) = cryptoMarketDao.bookmarkCoin(rankedCoin.id)
+
+    suspend fun bookmarkCoin(coinId: String) = cryptoMarketDao.bookmarkCoin(coinId)
+
+    suspend fun getBookMarkedList() : List<RankedCoin> = cryptoMarketDao.getBookMarkedList()
+
+    suspend fun insertAllCoinsRemoteKeys(remoteKeys: List<CoinsRemoteKeys>) = remoteKeysDao.insertAllRemoteKeys(remoteKeys)
+
+    suspend fun getRemoteKeysCoinId(coinId: String): CoinsRemoteKeys? = remoteKeysDao.remoteKeysCoinId(coinId)
+
+    suspend fun clearCoinsRemoteKeys() = remoteKeysDao.clearCoinsRemoteKeys()
 }

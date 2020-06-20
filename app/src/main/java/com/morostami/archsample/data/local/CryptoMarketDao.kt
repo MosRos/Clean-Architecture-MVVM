@@ -10,6 +10,7 @@ package com.morostami.archsample.data.local
 
 import androidx.room.*
 import com.morostami.archsample.domain.model.RankedCoin
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CryptoMarketDao {
