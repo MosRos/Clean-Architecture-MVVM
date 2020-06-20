@@ -62,6 +62,10 @@ data class RankedCoin(
     var totalSupply: Long? = null, // null
     @SerializedName("total_volume")
     var totalVolume: Long? = null, // 14969737842
+
+    /*** Non Api(locale) Variables ***/
     @Expose(serialize = false, deserialize = false)
-    @Transient val placeholder: Int = R.drawable.placeholder_character
+    @Transient val placeholder: Int = R.drawable.placeholder_character,
+    @Expose(serialize = false, deserialize = false)
+    var isbookmarked: Boolean = false
 )

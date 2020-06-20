@@ -26,6 +26,18 @@ interface CoinGeckoService {
     @GET("coins/markets")
     suspend fun getMarketRanks(@Query("vs_currency") vs_currency: String) : NetworkResponse<List<RankedCoin>, CoinGeckoApiError>
 
+    @GET("coins/markets")
+    suspend fun getPagedMarketRanks(
+        @Query("vs_currency") vs_currency: String,
+        @Query("page") page: Int,
+        @Query("per_page") per_page: Int
+        ) : List<RankedCoin>
+
+    @GET("coins/markets")
+    suspend fun getBookMarks(
+        @Query("vs_currency") vs_currency: String,
+        @Query("ids") ids: List<String>) : NetworkResponse<List<RankedCoin>, CoinGeckoApiError>
+
     @GET("simple/supported_vs_currencies")
     suspend fun getSupportedVSCurrencies() : NetworkResponse<List<String>, CoinGeckoApiError>
 }

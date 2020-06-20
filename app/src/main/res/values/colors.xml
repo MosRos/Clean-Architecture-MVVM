@@ -18,7 +18,7 @@
     <color name="text_color_primary">#171717</color>
     <color name="text_color_secondary">#282828</color>
 
-    <color name="divider_color">#DDD7FF</color>
-    <color name="element_background_color">#EBE7FF</color>
+    <color name="divider_color">#BCBACB</color>
+    <color name="element_background_color">#D4D2DE</color>
 
 </resources>

@@ -14,4 +14,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface CryptoMarketRepository {
     fun getRanks() : Flow<Resource<List<RankedCoin>>>
+    fun getBookMarks() : Flow<Resource<List<RankedCoin>>>
 }

@@ -10,7 +10,7 @@ package com.morostami.archsample.di
 
 import com.morostami.archsample.ui.search.CoinSearchFragment
 import com.morostami.archsample.ui.MainActivity
-import com.morostami.archsample.ui.marketrank.MarketRankFragment
+import com.morostami.archsample.ui.marketrank.MarketRanksFragment
 import dagger.Subcomponent
 
 
@@ -25,5 +25,5 @@ interface CoinsComponent {
 
     fun injectMainActivity(mainActivity: MainActivity)
     fun injectCoinsListFragment(coinListFragment: CoinSearchFragment)
-    fun injectMarketRankFragment(marketRankFragment: MarketRankFragment)
+    fun injectMarketRankFragment(marketRanksFragment: MarketRanksFragment)
 }

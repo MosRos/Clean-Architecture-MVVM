@@ -26,7 +26,7 @@ import com.morostami.archsample.ui.MainActivity
 import timber.log.Timber
 import javax.inject.Inject
 
-class MarketRankFragment : Fragment(), OnRankedCoinClick {
+class MarketRanksFragment : Fragment(), OnRankedCoinClick {
     private val TAG : String = this.javaClass.simpleName
 
     @Inject
@@ -34,7 +34,7 @@ class MarketRankFragment : Fragment(), OnRankedCoinClick {
     private lateinit var mContext: Context
     private lateinit var dataBinding: FragmentMarketRankBinding
     private lateinit var rankRecycler: RecyclerView
-    private lateinit var ranksAdapter: RankedCoinAdapter
+    private lateinit var rankedCoinAdapter: RankedCoinAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -68,7 +68,6 @@ class MarketRankFragment : Fragment(), OnRankedCoinClick {
         Timber.e("Start Observing values")
         marketViewModel.marketRankedList.observe(viewLifecycleOwner, Observer {
             it?.let {
-                Timber.e("received ranks ${it.size}")
                 updateRanksAdapter(it)
             }
         })
@@ -79,12 +78,13 @@ class MarketRankFragment : Fragment(), OnRankedCoinClick {
         rankRecycler = dataBinding.rankRecycler
         rankRecycler.layoutManager = llManager
 
-        ranksAdapter = RankedCoinAdapter(this)
-        dataBinding.rankAdapter = ranksAdapter
+        rankedCoinAdapter = RankedCoinAdapter(this)
+        rankRecycler.adapter = rankedCoinAdapter
     }
 
     private fun updateRanksAdapter(coins: List<RankedCoin>) {
-        ranksAdapter.setCoinsList(coins.sortedBy { it.marketCapRank })
+        dataBinding.progressBar.visibility = View.GONE
+        rankedCoinAdapter.setCoinsList(coins)
     }
 
     override fun onItemClicked(rankedCoin: RankedCoin, position: Int) {

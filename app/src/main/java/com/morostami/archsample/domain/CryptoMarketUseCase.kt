@@ -14,7 +14,8 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class CryptoMarketUseCase @Inject constructor(private val cryptoMarketRepository: CryptoMarketRepository) {
-    fun getMarketRanks() : Flow<Resource<List<RankedCoin>>> {
-        return cryptoMarketRepository.getRanks()
-    }
+
+    fun getMarketRanks() : Flow<Resource<List<RankedCoin>>> = cryptoMarketRepository.getRanks()
+
+    fun getBookMarks() : Flow<Resource<List<RankedCoin>>> = cryptoMarketRepository.getBookMarks()
 }

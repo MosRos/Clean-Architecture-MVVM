@@ -13,6 +13,11 @@ open class MainApp : Application() {
 
     private lateinit var _mainAppp: MainApp
 
+    companion object {
+        lateinit var instance: MainApp
+            private set
+    }
+
     val appComponent: AppComponent by lazy {
         DaggerAppComponent.builder()
             .application(_mainAppp)
@@ -22,6 +27,7 @@ open class MainApp : Application() {
     override fun onCreate() {
         super.onCreate()
         _mainAppp = this
+        instance = this
         initRealm(this)
 
         if (BuildConfig.DEBUG) {
@@ -33,6 +39,10 @@ open class MainApp : Application() {
 
     private fun initRealm(appContext: Application) {
         Realm.init(appContext)
+    }
+
+    fun getAppContext() : Application {
+        return _mainAppp
     }
 
     /** A tree which logs important information for crash reporting.  */
