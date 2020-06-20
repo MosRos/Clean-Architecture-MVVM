@@ -12,15 +12,14 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
+import androidx.room.withTransaction
 import com.morostami.archsample.data.api.CoinGeckoService
+import com.morostami.archsample.data.local.CoinsRoomDataBase
 import com.morostami.archsample.data.local.CryptoLocalDataSource
 import com.morostami.archsample.domain.model.CoinsRemoteKeys
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.utils.NetworkUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -29,7 +28,7 @@ import javax.inject.Inject
 
 
 const val COINGECKO_STARTING_PAGE_INDEX = 1
-const val PAGE_SIZE = 35
+const val PAGE_SIZE = 50
 
 @OptIn(ExperimentalPagingApi::class)
 class MarketRanksMediator @Inject constructor(
@@ -80,24 +79,20 @@ class MarketRanksMediator @Inject constructor(
             val endOfPaginationReached = rankedCoins.isNullOrEmpty()
             Timber.e("PagingMediator End-Of-Pagination = ${endOfPaginationReached.toString()}")
 
-            if (loadType == LoadType.REFRESH && !rankedCoins.isNullOrEmpty()) {
-                GlobalScope.async(Dispatchers.IO) {
+            runBlocking {
+                if (loadType == LoadType.REFRESH && !rankedCoins.isNullOrEmpty()) {
                     cryptoLocalDataSource.clearCoinsRemoteKeys()
                     cryptoLocalDataSource.deleteAllRankedCoins()
                 }
-            }
-            val prevKey = if (page == COINGECKO_STARTING_PAGE_INDEX) null else page - 1
-            val nextKey = if (endOfPaginationReached) null else page + 1
-            val keys = rankedCoins?.map {
-                CoinsRemoteKeys(coin_Id = it.id, prevKey = prevKey, nextKey = nextKey)
-            }
-            keys?.apply {
-                GlobalScope.launch(Dispatchers.IO) {
+                val prevKey = if (page == COINGECKO_STARTING_PAGE_INDEX) null else page - 1
+                val nextKey = if (endOfPaginationReached) null else page + 1
+                val keys = rankedCoins?.map {
+                    CoinsRemoteKeys(coin_Id = it.id, prevKey = prevKey, nextKey = nextKey)
+                }
+                keys?.apply {
                     cryptoLocalDataSource.insertAllCoinsRemoteKeys(keys!!)
                 }
-            }
-            rankedCoins?.apply {
-                GlobalScope.launch(Dispatchers.IO) {
+                rankedCoins?.apply {
                     cryptoLocalDataSource.insertRankedCoins(rankedCoins!!)
                 }
             }

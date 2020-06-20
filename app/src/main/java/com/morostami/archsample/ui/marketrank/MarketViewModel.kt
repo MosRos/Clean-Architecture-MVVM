@@ -37,7 +37,7 @@ class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketU
     var pagedMarketRanks: LiveData<PagingData<RankedCoin>> = MutableLiveData<PagingData<RankedCoin>>()
 
     init {
-//        viewModelScope.launch {
+//        viewModelScope.launch(Dispatchers.IO) {
 ////            getMarketRanks()
 //            getPagedRankedCoins()
 //        }
@@ -68,9 +68,9 @@ class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketU
         }
     }
 
-    fun getPagedRankedCoins() : Flow<PagingData<RankedCoin>> = flow {
+    fun getPagedRankedCoins() : Flow<PagingData<RankedCoin>> {
         _rankLoading.value = LoadingState.LOADING
-        emitAll(marketRanksUseCase.getPagedRanks())
+        return marketRanksUseCase.getPagedRanks().cachedIn(viewModelScope)
     }
 
     private fun setLoadingState(state: LoadingState) {

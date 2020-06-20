@@ -13,5 +13,5 @@ import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
 
 interface MarketRanksRepository {
-    suspend fun getRanks() : Flow<PagingData<RankedCoin>>
+    fun getRanks() : Flow<PagingData<RankedCoin>>
 }

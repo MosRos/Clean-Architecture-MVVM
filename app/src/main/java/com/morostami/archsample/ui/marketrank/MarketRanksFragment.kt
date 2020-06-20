@@ -65,7 +65,7 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
 
     override fun onStart() {
         super.onStart()
-        marketViewModel.getPagedRankedCoins()
+//        marketViewModel.getPagedRankedCoins()
     }
 
     private fun setObservers() {
@@ -73,9 +73,7 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
         viewLifecycleOwner.lifecycleScope.launch {
             marketViewModel.getPagedRankedCoins().collectLatest{
                 it?.let {
-                    marketRanksAdapter.submitData(it)
-                    dataBinding.progressBar.visibility = View.GONE
-//                    updateRanksAdapter(it)
+                    updateRanksAdapter(it)
                 }
             }
         }

@@ -26,7 +26,7 @@ class MarketRanksRepositoryImpl @Inject constructor(
     private val coinGeckoService: CoinGeckoService,
     private val marketRanksMediator: MarketRanksMediator) : MarketRanksRepository {
 
-    override suspend fun getRanks(): Flow<PagingData<RankedCoin>> {
+    override fun getRanks(): Flow<PagingData<RankedCoin>> {
 
         val pagingSourceFactory = { cryptoLocalDataSource.getPagedRankedCoins() }
         return Pager(

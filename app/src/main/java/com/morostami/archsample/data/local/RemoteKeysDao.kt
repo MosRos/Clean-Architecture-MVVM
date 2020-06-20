@@ -17,11 +17,11 @@ import com.morostami.archsample.domain.model.CoinsRemoteKeys
 @Dao
 interface RemoteKeysDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertAllRemoteKeys(remoteKey: List<CoinsRemoteKeys>)
+    suspend fun insertAllRemoteKeys(remoteKey: List<CoinsRemoteKeys>)
 
     @Query("SELECT * FROM CoinsRemoteKeys WHERE coin_Id = :coinId")
-    fun remoteKeysCoinId(coinId: String): CoinsRemoteKeys?
+    suspend fun remoteKeysCoinId(coinId: String): CoinsRemoteKeys?
 
     @Query("DELETE FROM CoinsRemoteKeys")
-    fun clearCoinsRemoteKeys()
+    suspend fun clearCoinsRemoteKeys()
 }

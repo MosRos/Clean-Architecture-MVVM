@@ -15,5 +15,5 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MarketRanksUseCase @Inject constructor(private val marketRanksRepository: MarketRanksRepository) {
-    suspend fun getPagedRanks() : Flow<PagingData<RankedCoin>> = marketRanksRepository.getRanks()
+    fun getPagedRanks() : Flow<PagingData<RankedCoin>> = marketRanksRepository.getRanks()
 }
