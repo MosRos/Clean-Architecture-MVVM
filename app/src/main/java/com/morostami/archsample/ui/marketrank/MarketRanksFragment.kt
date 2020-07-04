@@ -16,13 +16,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.morostami.archsample.MainApp
 import com.morostami.archsample.R
 import com.morostami.archsample.databinding.FragmentMarketRankBinding
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.ui.MainActivity
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -34,7 +38,7 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
     private lateinit var mContext: Context
     private lateinit var dataBinding: FragmentMarketRankBinding
     private lateinit var rankRecycler: RecyclerView
-    private lateinit var rankedCoinAdapter: RankedCoinAdapter
+    private lateinit var marketRanksAdapter: MarketRanksAdapter
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,16 +65,18 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
 
     override fun onStart() {
         super.onStart()
-        marketViewModel.getMarketRanks()
+//        marketViewModel.getPagedRankedCoins()
     }
 
     private fun setObservers() {
         Timber.e("Start Observing values")
-        marketViewModel.marketRankedList.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                updateRanksAdapter(it)
+        viewLifecycleOwner.lifecycleScope.launch {
+            marketViewModel.getPagedRankedCoins().collect{
+                it?.let {
+                    updateRanksAdapter(it)
+                }
             }
-        })
+        }
     }
 
     private fun initWidgets() {
@@ -78,13 +84,15 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
         rankRecycler = dataBinding.rankRecycler
         rankRecycler.layoutManager = llManager
 
-        rankedCoinAdapter = RankedCoinAdapter(this)
-        rankRecycler.adapter = rankedCoinAdapter
+        marketRanksAdapter = MarketRanksAdapter(this)
+        rankRecycler.adapter = marketRanksAdapter
     }
 
-    private fun updateRanksAdapter(coins: List<RankedCoin>) {
+    private fun updateRanksAdapter(coins: PagingData<RankedCoin>) {
+        viewLifecycleOwner.lifecycleScope.launch {
+            marketRanksAdapter.submitData(coins)
+        }
         dataBinding.progressBar.visibility = View.GONE
-        rankedCoinAdapter.setCoinsList(coins)
     }
 
     override fun onItemClicked(rankedCoin: RankedCoin, position: Int) {

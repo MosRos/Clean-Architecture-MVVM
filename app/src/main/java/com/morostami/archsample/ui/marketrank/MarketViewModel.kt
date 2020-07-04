@@ -8,31 +8,39 @@
 
 package com.morostami.archsample.ui.marketrank
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.liveData
+import androidx.lifecycle.*
+import androidx.paging.PagedList
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CryptoMarketUseCase
+import com.morostami.archsample.domain.MarketRanksUseCase
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.utils.LoadingState
 import com.morostami.archsample.utils.Resource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScope
-class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketUseCase) : ViewModel() {
+class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketUseCase, val marketRanksUseCase: MarketRanksUseCase) : ViewModel() {
 
     private val _rankLoading = MutableLiveData<LoadingState>()
     val ranksLoading: LiveData<LoadingState>
         get() = _rankLoading
 
-
     var marketRankedList: LiveData<List<RankedCoin>> = MutableLiveData(ArrayList())
 
+    var pagedMarketRanks: LiveData<PagingData<RankedCoin>> = MutableLiveData<PagingData<RankedCoin>>()
+
     init {
-        getMarketRanks()
+//        viewModelScope.launch(Dispatchers.IO) {
+////            getMarketRanks()
+//            getPagedRankedCoins()
+//        }
     }
 
     fun getMarketRanks() {
@@ -60,7 +68,13 @@ class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketU
         }
     }
 
+    fun getPagedRankedCoins() : Flow<PagingData<RankedCoin>> {
+        _rankLoading.value = LoadingState.LOADING
+        return marketRanksUseCase.getPagedRanks().cachedIn(viewModelScope)
+    }
+
     private fun setLoadingState(state: LoadingState) {
         _rankLoading.value = state
     }
+
 }

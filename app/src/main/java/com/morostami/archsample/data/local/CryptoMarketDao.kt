@@ -8,8 +8,11 @@
 
 package com.morostami.archsample.data.local
 
+import androidx.annotation.NonNull
+import androidx.paging.PagingSource
 import androidx.room.*
 import com.morostami.archsample.domain.model.RankedCoin
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CryptoMarketDao {
@@ -26,6 +29,9 @@ interface CryptoMarketDao {
 
     @Query("SELECT * FROM RankedCoin")
     suspend fun getRankedCoinsList(): List<RankedCoin>
+
+    @Query("SELECT * FROM RankedCoin ORDER BY marketCapRank ASC")
+    fun getPagedRankedCoins(): PagingSource<Int, RankedCoin>
 
     @Delete
     suspend fun deleteRankedCoin(rankedCoin: RankedCoin)
