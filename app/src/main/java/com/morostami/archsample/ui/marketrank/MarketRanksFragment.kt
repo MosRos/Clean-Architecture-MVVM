@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.PagingData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.morostami.archsample.MainApp
 import com.morostami.archsample.R
 import com.morostami.archsample.databinding.FragmentMarketRankBinding
 import com.morostami.archsample.domain.model.RankedCoin
