@@ -16,10 +16,10 @@ import com.morostami.archsample.domain.CoinsListRepository
 import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.utils.Resource
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
@@ -31,6 +31,7 @@ class CoinsListRepositoryImpl @Inject constructor(
     private val defaultLimit = 100
     private val defaultOffset = 0
 
+    @ExperimentalCoroutinesApi
     override fun getCoins(): Flow<Resource<List<Coin>>> {
         return  object : NetworkBoundResource<List<Coin>, List<Coin>, CoinGeckoApiError>(){
             override suspend fun getFromDatabase(

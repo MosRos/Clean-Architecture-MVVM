@@ -4,7 +4,6 @@ import android.app.Application
 import android.util.Log
 import com.morostami.archsample.di.AppComponent
 import com.morostami.archsample.di.DaggerAppComponent
-import io.realm.Realm
 import org.jetbrains.annotations.NonNls
 import timber.log.Timber
 
@@ -28,17 +27,12 @@ open class MainApp : Application() {
         super.onCreate()
         _mainAppp = this
         instance = this
-        initRealm(this)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         } else {
             Timber.plant(CrashReportingTree())
         }
-    }
-
-    private fun initRealm(appContext: Application) {
-        Realm.init(appContext)
     }
 
     fun getAppContext() : Application {

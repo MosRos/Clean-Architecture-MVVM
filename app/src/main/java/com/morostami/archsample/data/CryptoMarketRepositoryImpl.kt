@@ -15,9 +15,7 @@ import com.morostami.archsample.data.local.CryptoLocalDataSource
 import com.morostami.archsample.domain.CryptoMarketRepository
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.utils.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
@@ -29,6 +27,7 @@ class CryptoMarketRepositoryImpl @Inject constructor(
     private val defaultLimit = 100
     private val defaultOffset = 0
 
+    @ExperimentalCoroutinesApi
     override fun getRanks(): Flow<Resource<List<RankedCoin>>> {
         return object : NetworkBoundResource<List<RankedCoin>, List<RankedCoin>, CoinGeckoApiError>() {
 
@@ -58,6 +57,7 @@ class CryptoMarketRepositoryImpl @Inject constructor(
         }.flow()
     }
 
+    @ExperimentalCoroutinesApi
     override fun getBookMarks(): Flow<Resource<List<RankedCoin>>> {
         return object : NetworkBoundResource<List<RankedCoin>, List<RankedCoin>, CoinGeckoApiError>(){
             var bookmarkedIds: ArrayList<String> = ArrayList()

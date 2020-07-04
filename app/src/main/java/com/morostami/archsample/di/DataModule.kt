@@ -22,7 +22,6 @@ import com.morostami.archsample.domain.CryptoMarketRepository
 import com.morostami.archsample.domain.MarketRanksRepository
 import dagger.Module
 import dagger.Provides
-import io.realm.RealmConfiguration
 import javax.inject.Singleton
 
 @Module
@@ -50,16 +49,6 @@ class DataModule {
     @Provides
     fun provideRemoteKeysDao(coinsRoomDataBase: CoinsRoomDataBase) : RemoteKeysDao {
         return coinsRoomDataBase.remoteKeysDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideCryptocurrencyConfig() : RealmConfiguration {
-        return RealmConfiguration.Builder()
-            .name("cryptocurrency.realm")
-            .schemaVersion(1)
-//        .addModule(CryptoCurrencyModule())
-            .build()
     }
 
     @Singleton

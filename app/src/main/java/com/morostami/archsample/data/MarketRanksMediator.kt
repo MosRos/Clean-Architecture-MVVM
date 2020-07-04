@@ -36,7 +36,7 @@ class MarketRanksMediator @Inject constructor(
     private val cryptoLocalDataSource: CryptoLocalDataSource,
     private val coinGeckoService: CoinGeckoService) : RemoteMediator<Int, RankedCoin>() {
 
-    override suspend fun initialize(): InitializeAction = RemoteMediator.InitializeAction.LAUNCH_INITIAL_REFRESH
+    override suspend fun initialize(): InitializeAction = InitializeAction.LAUNCH_INITIAL_REFRESH
 
     override suspend fun load(
         loadType: LoadType,
@@ -48,18 +48,13 @@ class MarketRanksMediator @Inject constructor(
                 remoteKeys?.nextKey?.minus(1) ?: COINGECKO_STARTING_PAGE_INDEX
             }
             LoadType.PREPEND -> {
-                val remoteKeys: CoinsRemoteKeys? = getRemoteKeyForFirstItem(state)
-                if (remoteKeys == null) {
-                    // The LoadType is PREPEND so some data was loaded before,
+                val remoteKeys: CoinsRemoteKeys = getRemoteKeyForFirstItem(state)
+                    ?: // The LoadType is PREPEND so some data was loaded before,
                     // so we should have been able to get remote keys
                     // If the remoteKeys are null, then we're an invalid state and we have a bug
                     throw InvalidObjectException("Remote key and the prevKey should not be null")
-                }
                 // If the previous key is null, then we can't request more data
-                val prevKey = remoteKeys.prevKey
-                if (prevKey == null) {
-                    return MediatorResult.Success(endOfPaginationReached = true)
-                }
+                val prevKey = remoteKeys.prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
                 remoteKeys.prevKey
             }
             LoadType.APPEND -> {
@@ -67,7 +62,7 @@ class MarketRanksMediator @Inject constructor(
                 if (remoteKeys?.nextKey == null) {
                     throw InvalidObjectException("Remote key should not be null for $loadType")
                 }
-                remoteKeys?.nextKey!!
+                remoteKeys.nextKey
             }
 
         }
@@ -77,10 +72,10 @@ class MarketRanksMediator @Inject constructor(
                 Timber.e("No Network Connection!")
                 return MediatorResult.Success(true)
             }
-            var rankedCoins = GlobalScope.async(Dispatchers.IO) {coinGeckoService.getPagedMarketRanks("usd", page, state.config.pageSize) }.await()
+            val rankedCoins = GlobalScope.async(Dispatchers.IO) {coinGeckoService.getPagedMarketRanks("usd", page, state.config.pageSize) }.await()
 
             val endOfPaginationReached = rankedCoins.isNullOrEmpty()
-            Timber.e("PagingMediator End-Of-Pagination = ${endOfPaginationReached.toString()}")
+            Timber.e("PagingMediator End-Of-Pagination = $endOfPaginationReached")
 
             runBlocking {
                 if (loadType == LoadType.REFRESH && !rankedCoins.isNullOrEmpty()) {
@@ -89,14 +84,14 @@ class MarketRanksMediator @Inject constructor(
                 }
                 val prevKey = if (page == COINGECKO_STARTING_PAGE_INDEX) null else page - 1
                 val nextKey = if (endOfPaginationReached) null else page + 1
-                val keys = rankedCoins?.map {
+                val keys = rankedCoins.map {
                     CoinsRemoteKeys(coin_Id = it.id, prevKey = prevKey, nextKey = nextKey)
                 }
-                keys?.apply {
-                    cryptoLocalDataSource.insertAllCoinsRemoteKeys(keys!!)
+                keys.apply {
+                    cryptoLocalDataSource.insertAllCoinsRemoteKeys(keys)
                 }
-                rankedCoins?.apply {
-                    cryptoLocalDataSource.insertRankedCoins(rankedCoins!!)
+                rankedCoins.apply {
+                    cryptoLocalDataSource.insertRankedCoins(rankedCoins)
                 }
             }
 
@@ -113,7 +108,7 @@ class MarketRanksMediator @Inject constructor(
     private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, RankedCoin>): CoinsRemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
-        return state.pages.lastOrNull() { it.data.isNotEmpty() }?.data?.lastOrNull()
+        return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { repo ->
                 // Get the remote keys of the last item retrieved
                 cryptoLocalDataSource.getRemoteKeysCoinId(repo.id)
