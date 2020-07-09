@@ -63,30 +63,30 @@ class MainViewModel @Inject constructor(private val coinsListUseCase: CoinsListU
     }
 
     fun searchCoins(searchInput: String) {
-        _loading.value = LoadingState.LOADING
-
-        if (searchInput.isEmpty()){
-            coinSearchResults = coinsList
-            setLoadingState(LoadingState.LOADED)
-            return
-        }
-
-        coinSearchResults = liveData {
-            coinsListUseCase.searchCoins(searchInput).collect {coinsRes ->
-                when(coinsRes) {
-                    is Resource.Success -> {
-                        Timber.e(coinsRes.invoke().size.toString())
-                        emit(coinsRes.invoke())
-                        setLoadingState(LoadingState.LOADED)
-                    }
-                    is Resource.Error<*, *> -> {
-                        Timber.e(coinsRes.error.toString())
-                        setLoadingState(LoadingState.error("fuck"))
-                    }
-                    is Resource.Loading -> { setLoadingState(LoadingState.LOADING) }
-                }
-            }
-        }
+//        _loading.value = LoadingState.LOADING
+//
+//        if (searchInput.isEmpty()){
+//            coinSearchResults = coinsList
+//            setLoadingState(LoadingState.LOADED)
+//            return
+//        }
+//
+//        coinSearchResults = liveData {
+//            coinsListUseCase.searchCoins(searchInput).collect {coinsRes ->
+//                when(coinsRes) {
+//                    is Resource.Success -> {
+//                        Timber.e(coinsRes.invoke().size.toString())
+//                        emit(coinsRes.invoke())
+//                        setLoadingState(LoadingState.LOADED)
+//                    }
+//                    is Resource.Error<*, *> -> {
+//                        Timber.e(coinsRes.error.toString())
+//                        setLoadingState(LoadingState.error("fuck"))
+//                    }
+//                    is Resource.Loading -> { setLoadingState(LoadingState.LOADING) }
+//                }
+//            }
+//        }
     }
 
     private fun setLoadingState(state: LoadingState) {

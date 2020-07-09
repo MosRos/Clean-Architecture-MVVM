@@ -7,7 +7,7 @@ import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
 @Entity
-open class Coin(
+data class Coin(
     @SerializedName("id")
     var id: String? = "xxx",
     @SerializedName("name")

@@ -8,10 +8,14 @@
 
 package com.morostami.archsample.data
 
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.PagingSource
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.morostami.archsample.data.api.CoinGeckoService
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
-import com.morostami.archsample.data.local.CoinsRoomDataSource
+import com.morostami.archsample.data.local.CoinsLocalDataSource
 import com.morostami.archsample.domain.CoinsListRepository
 import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.utils.Resource
@@ -26,10 +30,25 @@ import javax.inject.Inject
 
 class CoinsListRepositoryImpl @Inject constructor(
     private val coinsGeckoService: CoinGeckoService,
-    private val coinsRoomDataSource: CoinsRoomDataSource) : CoinsListRepository {
+    private val coinsLocalDataSource: CoinsLocalDataSource) : CoinsListRepository {
 
-    private val defaultLimit = 100
-    private val defaultOffset = 0
+    companion object {
+        const val COINS_PAGE_SIZE = 50
+    }
+
+    private val pageConfig = PagingConfig(pageSize = COINS_PAGE_SIZE, prefetchDistance = 15, enablePlaceholders = true, initialLoadSize = 100, maxSize = 200)
+    private val coinsPagingSourceFactory = {coinsLocalDataSource.getPagedCoins()}
+    private fun getSearchPagingSourceFactory(query: String): () -> PagingSource<Int, Coin> = {coinsLocalDataSource.searchPagedCoins(searchQuery = query)}
+
+    override fun searchCoins(searchQuery: String) : Flow<PagingData<Coin>> {
+        val pagingSourceFactory = if (searchQuery.isNullOrEmpty()) coinsPagingSourceFactory else getSearchPagingSourceFactory(searchQuery)
+
+        return Pager(
+            config = pageConfig,
+            initialKey = 1,
+            pagingSourceFactory = pagingSourceFactory
+        ).flow
+    }
 
     @ExperimentalCoroutinesApi
     override fun getCoins(): Flow<Resource<List<Coin>>> {
@@ -57,17 +76,17 @@ class CoinsListRepositoryImpl @Inject constructor(
 
     }
 
-    override fun searchCoins(searchInput: String): Flow<Resource<List<Coin>>> {
-        return flow() {
-            val results: List<Coin> = localSearchCoins(searchInput)
-            Timber.e("search results size ${results.size}")
-            emit(Resource.Success(localSearchCoins(searchInput)))
-        }
-    }
+//    override fun searchCoins(searchInput: String): Flow<Resource<List<Coin>>> {
+//        return flow() {
+//            val results: List<Coin> = localSearchCoins(searchInput)
+//            Timber.e("search results size ${results.size}")
+//            emit(Resource.Success(localSearchCoins(searchInput)))
+//        }
+//    }
 
     private suspend fun localSearchCoins(input: String) : List<Coin> {
         return GlobalScope.async(Dispatchers.IO){
-            coinsRoomDataSource.searchCoins(input)
+            coinsLocalDataSource.searchCoins(input)
         }.await()
     }
 
@@ -75,7 +94,7 @@ class CoinsListRepositoryImpl @Inject constructor(
 //        val coinsResult: List<Coin> = GlobalScope.async(Dispatchers.IO) {
 //            coinsRoomDataSource.getCoinsList()
 //        }.await()
-        val coinsResult: List<Coin> = coinsRoomDataSource.getCoinsList()
+        val coinsResult: List<Coin> = coinsLocalDataSource.getCoinsList()
         Timber.e(coinsResult.size.toString())
         return coinsResult
     }
@@ -95,6 +114,6 @@ class CoinsListRepositoryImpl @Inject constructor(
 //        GlobalScope.async(Dispatchers.IO) {
 //            coinsRoomDataSource.insertCoins(coins)
 //        }
-        coinsRoomDataSource.insertCoins(coins)
+        coinsLocalDataSource.insertCoins(coins)
     }
 }

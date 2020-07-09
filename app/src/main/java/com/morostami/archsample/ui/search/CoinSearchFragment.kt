@@ -18,22 +18,23 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.R
 import com.morostami.archsample.databinding.FragmentCoinsSearchBinding
 import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.ui.MainActivity
-import com.morostami.archsample.ui.MainViewModel
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class CoinSearchFragment : Fragment() {
-    private val TAG : String = this.javaClass.simpleName
+class CoinSearchFragment : Fragment(), OnCoinClick {
+    private val TAG: String = this.javaClass.simpleName
 
     @Inject
-    lateinit var mainViewModel: MainViewModel
+    lateinit var searchViewModel: SearchViewModel
     private lateinit var mContext: Context
     private lateinit var dataBinding: FragmentCoinsSearchBinding
     private lateinit var coinsRecycler: RecyclerView
@@ -49,9 +50,10 @@ class CoinSearchFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        dataBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_coins_search, container, false)
+        dataBinding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_coins_search, container, false)
         mContext = context ?: dataBinding.rootLayout.context
-        dataBinding.mainViewModel = mainViewModel
+        dataBinding.viewModel = searchViewModel
         dataBinding.lifecycleOwner = this
         return dataBinding.rootLayout
     }
@@ -59,23 +61,21 @@ class CoinSearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initWidgets()
-        setObservers()
         setListeners()
     }
 
     override fun onStart() {
         super.onStart()
         setObservers()
-        mainViewModel.searchCoins("")
     }
 
     private fun setObservers() {
-        mainViewModel.fragName.set("Search Coins")
-        mainViewModel.coinSearchResults.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                updateCoinsAdapter(it)
+        lifecycleScope.launch {
+            delay(200)
+            searchViewModel.searchCoins("").collect { page ->
+                updateCoinsAdapter(page)
             }
-        })
+        }
     }
 
     private fun initWidgets() {
@@ -84,14 +84,14 @@ class CoinSearchFragment : Fragment() {
         coinsRecycler = dataBinding.coinsRecycler
         coinsRecycler.layoutManager = gridLM
 
-        coinsAdapter = CoinsAdapter()
-        dataBinding.coinsdAdapter = coinsAdapter
+        coinsAdapter = CoinsAdapter(this)
+        coinsRecycler.adapter = coinsAdapter
     }
 
     private fun setListeners() {
-        dataBinding.searchEdt.addTextChangedListener(object : TextWatcher{
+        dataBinding.searchEdt.addTextChangedListener(object : TextWatcher {
 
-            private val DELAY: Long = 750
+            private val DELAY: Long = 650
             var searchJob = SupervisorJob()
             val searchScope = CoroutineScope(Dispatchers.Main + searchJob)
 
@@ -113,11 +113,18 @@ class CoinSearchFragment : Fragment() {
     }
 
     private fun doSearch(input: String) {
-        mainViewModel.searchCoins(input)
-        setObservers()
+        lifecycleScope.launch {
+            searchViewModel.searchCoins(input).collect { pages ->
+                updateCoinsAdapter(pages)
+            }
+        }
     }
 
-    private fun updateCoinsAdapter(coins: List<Coin>) {
-        coinsAdapter.setCoinsList(coins)
+    private suspend fun updateCoinsAdapter(coins: PagingData<Coin>) {
+        coinsAdapter.submitData(coins)
+    }
+
+    override fun onItemClicked(coin: Coin) {
+        Toast.makeText(mContext, "${coin.name} + ${coin.symbol} clicked", Toast.LENGTH_SHORT).show()
     }
 }

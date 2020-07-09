@@ -3,7 +3,7 @@ package com.morostami.archsample.data.local
 import com.morostami.archsample.domain.model.Coin
 import javax.inject.Inject
 
-class CoinsRoomDataSource @Inject constructor(private val coinsRoomDao: CoinsRoomDao) : CoinsCRUD {
+class CoinsLocalDataSource @Inject constructor(private val coinsRoomDao: CoinsRoomDao) : CoinsCRUD {
 
     override suspend fun insertCoins(coinsList: List<Coin>) {
         coinsRoomDao.insertCoins(coinsList)
@@ -30,4 +30,8 @@ class CoinsRoomDataSource @Inject constructor(private val coinsRoomDao: CoinsRoo
     }
 
     suspend fun searchCoins(searchQuery: String) = coinsRoomDao.searchCoins(searchQuery)
+
+    fun searchPagedCoins(searchQuery: String) = coinsRoomDao.searchPagedCoins(searchQuery)
+
+    fun getPagedCoins() = coinsRoomDao.getPagedCoins()
 }

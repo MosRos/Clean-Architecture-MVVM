@@ -20,7 +20,6 @@ import com.morostami.archsample.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -34,7 +33,8 @@ const val PAGE_SIZE = 50
 @OptIn(ExperimentalPagingApi::class)
 class MarketRanksMediator @Inject constructor(
     private val cryptoLocalDataSource: CryptoLocalDataSource,
-    private val coinGeckoService: CoinGeckoService) : RemoteMediator<Int, RankedCoin>() {
+    private val coinGeckoService: CoinGeckoService
+) : RemoteMediator<Int, RankedCoin>() {
 
     override suspend fun initialize(): InitializeAction = InitializeAction.LAUNCH_INITIAL_REFRESH
 
@@ -54,7 +54,9 @@ class MarketRanksMediator @Inject constructor(
                     // If the remoteKeys are null, then we're an invalid state and we have a bug
                     throw InvalidObjectException("Remote key and the prevKey should not be null")
                 // If the previous key is null, then we can't request more data
-                val prevKey = remoteKeys.prevKey ?: return MediatorResult.Success(endOfPaginationReached = true)
+                val prevKey = remoteKeys.prevKey ?: return MediatorResult.Success(
+                    endOfPaginationReached = true
+                )
                 remoteKeys.prevKey
             }
             LoadType.APPEND -> {
@@ -68,31 +70,35 @@ class MarketRanksMediator @Inject constructor(
         }
 
         try {
-            if (!NetworkUtils.hasNetworkConnection()){
+            if (!NetworkUtils.hasNetworkConnection()) {
                 Timber.e("No Network Connection!")
                 return MediatorResult.Success(true)
             }
-            val rankedCoins = GlobalScope.async(Dispatchers.IO) {coinGeckoService.getPagedMarketRanks("usd", page, state.config.pageSize) }.await()
+            val rankedCoins = GlobalScope.async(Dispatchers.IO) {
+                coinGeckoService.getPagedMarketRanks(
+                    "usd",
+                    page,
+                    state.config.pageSize
+                )
+            }.await()
 
             val endOfPaginationReached = rankedCoins.isNullOrEmpty()
             Timber.e("PagingMediator End-Of-Pagination = $endOfPaginationReached")
 
-            runBlocking {
-                if (loadType == LoadType.REFRESH && !rankedCoins.isNullOrEmpty()) {
-                    cryptoLocalDataSource.clearCoinsRemoteKeys()
-                    cryptoLocalDataSource.deleteAllRankedCoins()
-                }
-                val prevKey = if (page == COINGECKO_STARTING_PAGE_INDEX) null else page - 1
-                val nextKey = if (endOfPaginationReached) null else page + 1
-                val keys = rankedCoins.map {
-                    CoinsRemoteKeys(coin_Id = it.id, prevKey = prevKey, nextKey = nextKey)
-                }
-                keys.apply {
-                    cryptoLocalDataSource.insertAllCoinsRemoteKeys(keys)
-                }
-                rankedCoins.apply {
-                    cryptoLocalDataSource.insertRankedCoins(rankedCoins)
-                }
+            if (loadType == LoadType.REFRESH && !rankedCoins.isNullOrEmpty()) {
+                cryptoLocalDataSource.clearCoinsRemoteKeys()
+                cryptoLocalDataSource.deleteAllRankedCoins()
+            }
+            val prevKey = if (page == COINGECKO_STARTING_PAGE_INDEX) null else page - 1
+            val nextKey = if (endOfPaginationReached) null else page + 1
+            val keys = rankedCoins.map {
+                CoinsRemoteKeys(coin_Id = it.id, prevKey = prevKey, nextKey = nextKey)
+            }
+            keys.apply {
+                cryptoLocalDataSource.insertAllCoinsRemoteKeys(keys)
+            }
+            rankedCoins.apply {
+                cryptoLocalDataSource.insertRankedCoins(rankedCoins)
             }
 
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)

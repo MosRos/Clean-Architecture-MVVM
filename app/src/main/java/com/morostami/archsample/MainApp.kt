@@ -8,10 +8,9 @@ import org.jetbrains.annotations.NonNls
 import timber.log.Timber
 
 
-open class MainApp : Application() {
+class MainApp : Application() {
 
     private lateinit var _mainAppp: MainApp
-
     companion object {
         lateinit var instance: MainApp
             private set
@@ -49,6 +48,7 @@ open class MainApp : Application() {
             if (priority == Log.VERBOSE || priority == Log.DEBUG) {
                 return
             }
+//             *** Commented and Does not removed for instructions and possible real usecases ***
 //            FakeCrashLibrary.log(priority, tag, message)
 //            if (t != null) {
 //                if (priority == Log.ERROR) {

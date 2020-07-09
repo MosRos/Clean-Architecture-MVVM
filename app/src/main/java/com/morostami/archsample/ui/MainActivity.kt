@@ -10,7 +10,6 @@ package com.morostami.archsample.ui
 
 import android.content.DialogInterface
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
@@ -22,12 +21,17 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.NavigationUI
+import androidx.work.Constraints
+import androidx.work.NetworkType
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.morostami.archsample.MainApp
 import com.morostami.archsample.R
 import com.morostami.archsample.data.prefs.PreferencesHelper
 import com.morostami.archsample.databinding.ActivityMainBinding
 import com.morostami.archsample.di.CoinsComponent
+import com.morostami.archsample.ui.workers.SyncCoinsWorker
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -44,6 +48,7 @@ val THEME_ICON_MAPPINGS = mapOf(
     R.drawable.ic_moon to AppCompatDelegate.MODE_NIGHT_YES,
     R.drawable.ic_brightness_auto to AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
 )
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -79,6 +84,11 @@ class MainActivity : AppCompatActivity() {
         setListeners()
     }
 
+    override fun onStart() {
+        super.onStart()
+        initSyncWorker()
+    }
+
     private fun initBottomNavAndController() {
         bottomNav = databinding.bottomNavView
         navController = Navigation.findNavController(this, R.id.nav_host_container)
@@ -95,6 +105,18 @@ class MainActivity : AppCompatActivity() {
                 databinding.appBarLayout.visibility = View.VISIBLE
             }
         }
+    }
+
+    private fun initSyncWorker() {
+        val syncWorkConstraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
+            .setRequiredNetworkType(NetworkType.NOT_ROAMING)
+            .setRequiresBatteryNotLow(true)
+            .build()
+        val syncRequest = OneTimeWorkRequestBuilder<SyncCoinsWorker>()
+            .setConstraints(syncWorkConstraints)
+            .build()
+        WorkManager.getInstance(this.applicationContext).beginWith(syncRequest).enqueue()
     }
 
     private fun setObservers() {

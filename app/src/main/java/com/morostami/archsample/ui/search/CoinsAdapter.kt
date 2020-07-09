@@ -10,17 +10,24 @@ package com.morostami.archsample.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.databinding.ListItemCoinBinding
 import com.morostami.archsample.domain.model.Coin
 
-class CoinsAdapter() : RecyclerView.Adapter<CoinsAdapter.CoinsViewHolder>() {
+class CoinsAdapter(private val onCoinClick: OnCoinClick) :
+    PagingDataAdapter<Coin, CoinsAdapter.CoinsViewHolder>(COINS_COMPARATOR) {
 
-    private var coinsList: List<Coin> = ArrayList()
+    companion object {
+        private val COINS_COMPARATOR = object : DiffUtil.ItemCallback<Coin>() {
+            override fun areItemsTheSame(oldItem: Coin, newItem: Coin): Boolean {
+                return (oldItem.id == newItem.id)
+            }
 
-    fun setCoinsList(coins: List<Coin>) {
-        this.coinsList = coins
-        notifyDataSetChanged()
+            override fun areContentsTheSame(oldItem: Coin, newItem: Coin): Boolean =
+                oldItem == newItem
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinsViewHolder {
@@ -28,18 +35,21 @@ class CoinsAdapter() : RecyclerView.Adapter<CoinsAdapter.CoinsViewHolder>() {
         return CoinsViewHolder(binding)
     }
 
-    override fun getItemCount(): Int {
-        return coinsList.size
-    }
-
     override fun onBindViewHolder(holder: CoinsViewHolder, position: Int) {
-        val coin: Coin = coinsList[position]
-        holder.databinding.coinItem = coin
-        holder.databinding.executePendingBindings()
+        val coin: Coin? = getItem(position)
+        coin?.let {
+            holder.databinding.coinItem = coin
+            holder.bind(coin, onCoinClick)
+            holder.databinding.executePendingBindings()
+        }
     }
 
-    inner class CoinsViewHolder(val databinding: ListItemCoinBinding) : RecyclerView.ViewHolder(databinding.rootLayout) {
-
+    class CoinsViewHolder(val databinding: ListItemCoinBinding) :
+        RecyclerView.ViewHolder(databinding.rootLayout) {
+        fun bind(coin: Coin, onCoinClick: OnCoinClick) {
+            databinding.rootLayout.setOnClickListener {
+                onCoinClick.onItemClicked(coin)
+            }
+        }
     }
-
 }

@@ -53,8 +53,8 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideCoinsListRepository(coinGeckoService: CoinGeckoService,  coinsRoomDataSource: CoinsRoomDataSource) : CoinsListRepository {
-        return CoinsListRepositoryImpl(coinGeckoService, coinsRoomDataSource)
+    fun provideCoinsListRepository(coinGeckoService: CoinGeckoService, coinsLocalDataSource: CoinsLocalDataSource) : CoinsListRepository {
+        return CoinsListRepositoryImpl(coinGeckoService, coinsLocalDataSource)
     }
 
     @Singleton

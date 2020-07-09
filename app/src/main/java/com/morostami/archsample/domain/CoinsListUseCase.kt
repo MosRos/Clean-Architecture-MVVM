@@ -8,6 +8,7 @@
 
 package com.morostami.archsample.domain
 
+import androidx.paging.PagingData
 import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.utils.Resource
 import kotlinx.coroutines.flow.Flow
@@ -18,7 +19,7 @@ class CoinsListUseCase @Inject constructor(private val coinsListRepository: Coin
         return coinsListRepository.getCoins()
     }
 
-    fun searchCoins(inputQuery: String) : Flow<Resource<List<Coin>>> {
+    fun searchCoins(inputQuery: String) : Flow<PagingData<Coin>> {
         return coinsListRepository.searchCoins(inputQuery)
     }
 }
