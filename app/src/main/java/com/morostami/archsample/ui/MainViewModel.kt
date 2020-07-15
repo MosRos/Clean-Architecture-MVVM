@@ -12,18 +12,12 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.*
 import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CoinsListUseCase
-import com.morostami.archsample.domain.CryptoMarketUseCase
+import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.utils.LoadingState
-import com.morostami.archsample.utils.Resource
-import com.morostami.archsample.utils.invoke
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.FlowCollector
+import com.morostami.archsample.domain.base.invoke
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.Flow
 import timber.log.Timber
-import java.lang.Exception
 import javax.inject.Inject
 
 @ActivityScope

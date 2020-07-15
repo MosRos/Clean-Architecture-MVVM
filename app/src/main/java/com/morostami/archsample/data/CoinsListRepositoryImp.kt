@@ -14,22 +14,22 @@ import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.morostami.archsample.data.api.CoinGeckoService
+import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
 import com.morostami.archsample.data.local.CoinsLocalDataSource
 import com.morostami.archsample.domain.CoinsListRepository
+import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.model.Coin
-import com.morostami.archsample.utils.Resource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
 class CoinsListRepositoryImpl @Inject constructor(
-    private val coinsGeckoService: CoinGeckoService,
+    private val remoteDataSource: RemoteDataSource,
     private val coinsLocalDataSource: CoinsLocalDataSource) : CoinsListRepository {
 
     companion object {
@@ -100,7 +100,7 @@ class CoinsListRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchFromApi() : NetworkResponse<List<Coin>, CoinGeckoApiError> {
-        val coinsResult = coinsGeckoService.getCoins()
+        val coinsResult = remoteDataSource.getCoins()
         when(coinsResult){
             is NetworkResponse.Success -> Timber.e(coinsResult.body.size.toString())
             is NetworkResponse.NetworkError -> Timber.e(coinsResult.error.toString())

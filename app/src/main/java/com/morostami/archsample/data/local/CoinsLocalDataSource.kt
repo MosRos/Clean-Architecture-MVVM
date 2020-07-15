@@ -1,37 +1,29 @@
 package com.morostami.archsample.data.local
 
+import com.morostami.archsample.data.local.doa.CoinsDao
 import com.morostami.archsample.domain.model.Coin
 import javax.inject.Inject
 
-class CoinsLocalDataSource @Inject constructor(private val coinsRoomDao: CoinsRoomDao) : CoinsCRUD {
+class CoinsLocalDataSource @Inject constructor(private val cryptoMarketDataBase: CryptoDataBase) :
+    CoinsDao {
 
-    override suspend fun insertCoins(coinsList: List<Coin>) {
-        coinsRoomDao.insertCoins(coinsList)
-    }
+    private val coinsDao by lazy { cryptoMarketDataBase.coinDao() }
 
-    override suspend fun insertCoin(coin: Coin) {
-        coinsRoomDao.insertCoin(coin)
-    }
+    override suspend fun insertCoins(coinsList: List<Coin>) = coinsDao.insertCoins(coinsList)
 
-    override suspend fun getAllCoins(): List<Coin> {
-        return coinsRoomDao.getAllCoins()
-    }
+    override suspend fun insertCoin(coin: Coin) = coinsDao.insertCoin(coin)
 
-    override suspend fun getCoinsList(): List<Coin> {
-        return coinsRoomDao.getCoinsList()
-    }
+    override suspend fun getAllCoins(): List<Coin> = coinsDao.getAllCoins()
 
-    override suspend fun deletCoin(coin: Coin) {
-        coinsRoomDao.deletCoin(coin)
-    }
+    override suspend fun getCoinsList(): List<Coin> = coinsDao.getCoinsList()
 
-    override suspend fun deletCoins(coinsList: List<Coin>) {
-        coinsRoomDao.deletCoins(coinsList)
-    }
+    override suspend fun deletCoin(coin: Coin) = coinsDao.deletCoin(coin)
 
-    suspend fun searchCoins(searchQuery: String) = coinsRoomDao.searchCoins(searchQuery)
+    override suspend fun deletCoins(coinsList: List<Coin>) = coinsDao.deletCoins(coinsList)
 
-    fun searchPagedCoins(searchQuery: String) = coinsRoomDao.searchPagedCoins(searchQuery)
+    override suspend fun searchCoins(searchQuery: String) = coinsDao.searchCoins(searchQuery)
 
-    fun getPagedCoins() = coinsRoomDao.getPagedCoins()
+    override fun searchPagedCoins(searchQuery: String) = coinsDao.searchPagedCoins(searchQuery)
+
+    override fun getPagedCoins() = coinsDao.getPagedCoins()
 }

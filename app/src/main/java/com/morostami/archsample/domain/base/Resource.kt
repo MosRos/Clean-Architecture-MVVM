@@ -1,16 +1,19 @@
 /*
  * *
- *  * Created by Moslem Rostami on 3/24/20 6:53 PM
+ *  * Created by Moslem Rostami on 7/13/20 8:14 PM
  *  * Copyright (c) 2020 . All rights reserved.
- *  * Last modified 3/24/20 6:53 PM
+ *  * Last modified 7/13/20 8:14 PM
  *
  */
 
-package com.morostami.archsample.utils
+package com.morostami.archsample.domain.base
 
 
 /**
  * A sealed class to represent UI states associated with a resource.
+ */
+/**
+ * In Comparision to #Result class, it can pass a server error as data
  */
 sealed class Resource<out T> {
 

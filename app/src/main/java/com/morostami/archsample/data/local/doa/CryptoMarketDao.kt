@@ -6,7 +6,7 @@
  *
  */
 
-package com.morostami.archsample.data.local
+package com.morostami.archsample.data.local.doa
 
 import androidx.annotation.NonNull
 import androidx.paging.PagingSource

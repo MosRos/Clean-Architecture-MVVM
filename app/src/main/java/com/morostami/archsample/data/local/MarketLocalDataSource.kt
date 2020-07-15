@@ -14,9 +14,12 @@ import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class CryptoLocalDataSource @Inject constructor(
-    private val cryptoMarketDao: CryptoMarketDao,
-    private val remoteKeysDao: RemoteKeysDao) {
+class MarketLocalDataSource @Inject constructor(
+    private val cryptoDataBase: CryptoDataBase) {
+
+    private val cryptoMarketDao by lazy { cryptoDataBase.cryptoMarketDao() }
+    private val remoteKeysDao by lazy { cryptoDataBase.remoteKeysDao() }
+
     // RankedCoins
     suspend fun insertRankedCoins(coinsList: List<RankedCoin>) = cryptoMarketDao.insertRankedCoins(coinsList)
 

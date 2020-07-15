@@ -9,20 +9,20 @@
 package com.morostami.archsample.data
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.morostami.archsample.data.api.CoinGeckoService
+import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
-import com.morostami.archsample.data.local.CryptoLocalDataSource
+import com.morostami.archsample.data.local.MarketLocalDataSource
 import com.morostami.archsample.domain.CryptoMarketRepository
+import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.model.RankedCoin
-import com.morostami.archsample.utils.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import timber.log.Timber
 import javax.inject.Inject
 
 class CryptoMarketRepositoryImpl @Inject constructor(
-    private val cryptoLocalDataSource: CryptoLocalDataSource,
-    private val coinGeckoService: CoinGeckoService) : CryptoMarketRepository {
+    private val marketLocalDataSource: MarketLocalDataSource,
+    private val remoteDataSource: RemoteDataSource) : CryptoMarketRepository {
 
     private val defaultLimit = 100
     private val defaultOffset = 0
@@ -91,19 +91,19 @@ class CryptoMarketRepositoryImpl @Inject constructor(
     }
 
     private suspend fun loadFromDB() : List<RankedCoin> {
-        val dbResult: List<RankedCoin> = cryptoLocalDataSource.getAllRankedCoins()
+        val dbResult: List<RankedCoin> = marketLocalDataSource.getAllRankedCoins()
         Timber.e("Market DB Result is ${dbResult.size}")
         return dbResult
     }
 
     private suspend fun loadBookMarksFromDB() : List<RankedCoin> {
-        val dbResult: List<RankedCoin> = cryptoLocalDataSource.getBookMarkedList()
+        val dbResult: List<RankedCoin> = marketLocalDataSource.getBookMarkedList()
         Timber.e("Market DB Result is ${dbResult.size}")
         return dbResult
     }
 
     private suspend fun fetchFromNetwork() : NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
-        val apiResult = coinGeckoService.getMarketRanks("usd")
+        val apiResult = remoteDataSource.getMarketRanks("usd")
         when(apiResult){
             is NetworkResponse.Success -> Timber.e(apiResult.body.size.toString())
             is NetworkResponse.NetworkError -> Timber.e(apiResult.error.toString())
@@ -113,7 +113,7 @@ class CryptoMarketRepositoryImpl @Inject constructor(
     }
 
     private suspend fun fetchBookMarksFromNetwork(ids: List<String>) : NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
-        val apiResult = coinGeckoService.getBookMarks("usd", ids)
+        val apiResult = remoteDataSource.getBookMarks("usd", ids)
         when(apiResult){
             is NetworkResponse.Success -> Timber.e(apiResult.body.size.toString())
             is NetworkResponse.NetworkError -> Timber.e(apiResult.error.toString())
@@ -123,6 +123,6 @@ class CryptoMarketRepositoryImpl @Inject constructor(
     }
 
     private suspend fun saveRanks(rankedCoins: List<RankedCoin>){
-        cryptoLocalDataSource.insertRankedCoins(rankedCoins)
+        marketLocalDataSource.insertRankedCoins(rankedCoins)
     }
 }

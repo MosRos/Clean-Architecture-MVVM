@@ -48,15 +48,6 @@ class MainApp : Application() {
             if (priority == Log.VERBOSE || priority == Log.DEBUG) {
                 return
             }
-//             *** Commented and Does not removed for instructions and possible real usecases ***
-//            FakeCrashLibrary.log(priority, tag, message)
-//            if (t != null) {
-//                if (priority == Log.ERROR) {
-//                    FakeCrashLibrary.logError(t)
-//                } else if (priority == Log.WARN) {
-//                    FakeCrashLibrary.logWarning(t)
-//                }
-//            }
         }
     }
 }

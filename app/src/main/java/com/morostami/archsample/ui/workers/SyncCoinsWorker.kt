@@ -13,9 +13,9 @@ import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.morostami.archsample.MainApp
-import com.morostami.archsample.data.api.CoinGeckoService
+import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
-import com.morostami.archsample.data.local.CoinsRoomDao
+import com.morostami.archsample.data.local.CoinsLocalDataSource
 import com.morostami.archsample.domain.model.Coin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -28,9 +28,9 @@ class SyncCoinsWorker constructor(
     val workerParameters: WorkerParameters) : CoroutineWorker(context, workerParameters) {
 
     @Inject
-    lateinit var coinsRoomDao: CoinsRoomDao
+    lateinit var coinsLocalDataSource: CoinsLocalDataSource
     @Inject
-    lateinit var coinGeckoService: CoinGeckoService
+    lateinit var remoteDataSource: RemoteDataSource
 
     companion object {
         private const val TAG = "SyncCoinsWorker"
@@ -57,7 +57,7 @@ class SyncCoinsWorker constructor(
     }
 
     private suspend fun fetchFromApi() : NetworkResponse<List<Coin>, CoinGeckoApiError> {
-        val coinsResult = coinGeckoService.getCoins()
+        val coinsResult = remoteDataSource.getCoins()
         when(coinsResult){
             is NetworkResponse.Success -> Timber.e(coinsResult.body.size.toString())
             is NetworkResponse.NetworkError -> Timber.e(coinsResult.error.toString())
@@ -69,7 +69,7 @@ class SyncCoinsWorker constructor(
     suspend fun saveCoins(coins: List<Coin>) {
         Timber.e("Coins To Insert In DB ${coins.size}")
         withContext(Dispatchers.IO){
-            coinsRoomDao.insertCoins(coins)
+            coinsLocalDataSource.insertCoins(coins)
         }
     }
 }

@@ -8,8 +8,8 @@
 
 package com.morostami.archsample.domain
 
+import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.model.RankedCoin
-import com.morostami.archsample.utils.Resource
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

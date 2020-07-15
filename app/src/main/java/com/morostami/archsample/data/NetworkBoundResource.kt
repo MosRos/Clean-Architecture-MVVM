@@ -9,7 +9,7 @@
 package com.morostami.archsample.data
 
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.morostami.archsample.utils.Resource
+import com.morostami.archsample.domain.base.Resource
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 

@@ -16,6 +16,7 @@ import com.morostami.archsample.data.CryptoMarketRepositoryImpl
 import com.morostami.archsample.data.MarketRanksMediator
 import com.morostami.archsample.data.MarketRanksRepositoryImpl
 import com.morostami.archsample.data.api.CoinGeckoService
+import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.local.*
 import com.morostami.archsample.domain.CoinsListRepository
 import com.morostami.archsample.domain.CryptoMarketRepository
@@ -28,48 +29,29 @@ import javax.inject.Singleton
 class DataModule {
     @Singleton
     @Provides
-    fun provideCoinsRoomDb(application: Application) : CoinsRoomDataBase {
-        return Room.databaseBuilder(application.applicationContext, CoinsRoomDataBase::class.java, "coins_db")
+    fun provideCoinsRoomDb(application: Application) : CryptoDataBase {
+        return Room.databaseBuilder(application.applicationContext, CryptoDataBase::class.java, "coins_db")
             .build()
     }
 
     @Singleton
     @Provides
-    fun provideCoinsRoomDao(coinsRoomDataBase: CoinsRoomDataBase) : CoinsRoomDao {
-        return coinsRoomDataBase.coinDao()
+    fun provideCoinsListRepository(remoteDataSource: RemoteDataSource, coinsLocalDataSource: CoinsLocalDataSource) : CoinsListRepository {
+        return CoinsListRepositoryImpl(remoteDataSource, coinsLocalDataSource)
     }
 
     @Singleton
     @Provides
-    fun provideCryptoMarketDao(coinsRoomDataBase: CoinsRoomDataBase) : CryptoMarketDao {
-        return coinsRoomDataBase.cryptoMarketDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideRemoteKeysDao(coinsRoomDataBase: CoinsRoomDataBase) : RemoteKeysDao {
-        return coinsRoomDataBase.remoteKeysDao()
-    }
-
-    @Singleton
-    @Provides
-    fun provideCoinsListRepository(coinGeckoService: CoinGeckoService, coinsLocalDataSource: CoinsLocalDataSource) : CoinsListRepository {
-        return CoinsListRepositoryImpl(coinGeckoService, coinsLocalDataSource)
-    }
-
-    @Singleton
-    @Provides
-    fun provideCryptoMarketRepository(cryptoLocalDataSource: CryptoLocalDataSource, coinGeckoService: CoinGeckoService) : CryptoMarketRepository {
-        return CryptoMarketRepositoryImpl(cryptoLocalDataSource, coinGeckoService)
+    fun provideCryptoMarketRepository(marketLocalDataSource: MarketLocalDataSource, remoteDataSource: RemoteDataSource) : CryptoMarketRepository {
+        return CryptoMarketRepositoryImpl(marketLocalDataSource, remoteDataSource)
     }
 
     @OptIn(ExperimentalPagingApi::class)
     @Singleton
     @Provides
-    fun provideMarketRanksRepository(cryptoLocalDataSource: CryptoLocalDataSource,
-                                     coinGeckoService: CoinGeckoService,
+    fun provideMarketRanksRepository(marketLocalDataSource: MarketLocalDataSource,
                                      marketRanksMediator: MarketRanksMediator
     ) : MarketRanksRepository {
-        return MarketRanksRepositoryImpl(cryptoLocalDataSource, coinGeckoService, marketRanksMediator)
+        return MarketRanksRepositoryImpl(marketLocalDataSource, marketRanksMediator)
     }
 }

@@ -1,4 +1,4 @@
-package com.morostami.archsample.data.local
+package com.morostami.archsample.data.local.doa
 
 import androidx.paging.PagingSource
 import androidx.room.*
@@ -6,19 +6,25 @@ import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.domain.model.RankedCoin
 
 @Dao
-interface CoinsRoomDao : CoinsCRUD {
+interface CoinsDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun insertCoins(coinsList: List<Coin>)
+    suspend fun insertCoins(coinsList: List<Coin>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    override suspend fun insertCoin(coin: Coin)
+    suspend fun insertCoin(coin: Coin)
 
     @Query("SELECT * FROM Coin")
-    override suspend fun getAllCoins(): List<Coin>
+    suspend fun getAllCoins(): List<Coin>
 
     @Query("SELECT * FROM Coin")
-    override suspend fun getCoinsList(): List<Coin>
+    suspend fun getCoinsList(): List<Coin>
+
+    @Delete
+    suspend fun deletCoin(coin: Coin)
+
+    @Delete
+    suspend fun deletCoins(coinsList: List<Coin>)
 
     @Query("SELECT * FROM Coin WHERE symbol LIKE :input || '%' OR name LIKE :input || '%'")
     suspend fun searchCoins(input: String): List<Coin>
@@ -28,10 +34,4 @@ interface CoinsRoomDao : CoinsCRUD {
 
     @Query("SELECT * FROM Coin ORDER BY symbol ASC")
     fun getPagedCoins(): PagingSource<Int, Coin>
-
-    @Delete
-    override suspend fun deletCoin(coin: Coin)
-
-    @Delete
-    override suspend fun deletCoins(coinsList: List<Coin>)
 }

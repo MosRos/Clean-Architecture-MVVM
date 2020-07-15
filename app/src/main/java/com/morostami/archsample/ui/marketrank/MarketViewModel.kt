@@ -9,19 +9,15 @@
 package com.morostami.archsample.ui.marketrank
 
 import androidx.lifecycle.*
-import androidx.paging.PagedList
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CryptoMarketUseCase
 import com.morostami.archsample.domain.MarketRanksUseCase
+import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.utils.LoadingState
-import com.morostami.archsample.utils.Resource
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.*
-import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 

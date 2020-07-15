@@ -71,10 +71,4 @@ class NetModule {
             .addCallAdapterFactory(NetworkResponseAdapterFactory())
             .build()
     }
-
-    @Singleton
-    @Provides
-    fun provideCoinGeckoService(@NonNull retrofit: Retrofit) : CoinGeckoService {
-        return retrofit.create(CoinGeckoService::class.java)
-    }
 }

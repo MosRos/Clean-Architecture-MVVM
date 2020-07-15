@@ -13,7 +13,8 @@ import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
 import com.morostami.archsample.data.api.CoinGeckoService
-import com.morostami.archsample.data.local.CryptoLocalDataSource
+import com.morostami.archsample.data.api.RemoteDataSource
+import com.morostami.archsample.data.local.MarketLocalDataSource
 import com.morostami.archsample.domain.model.CoinsRemoteKeys
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.utils.NetworkUtils
@@ -32,8 +33,8 @@ const val PAGE_SIZE = 50
 
 @OptIn(ExperimentalPagingApi::class)
 class MarketRanksMediator @Inject constructor(
-    private val cryptoLocalDataSource: CryptoLocalDataSource,
-    private val coinGeckoService: CoinGeckoService
+    private val marketLocalDataSource: MarketLocalDataSource,
+    private val remoteDataSource: RemoteDataSource
 ) : RemoteMediator<Int, RankedCoin>() {
 
     override suspend fun initialize(): InitializeAction = InitializeAction.LAUNCH_INITIAL_REFRESH
@@ -75,7 +76,7 @@ class MarketRanksMediator @Inject constructor(
                 return MediatorResult.Success(true)
             }
             val rankedCoins = GlobalScope.async(Dispatchers.IO) {
-                coinGeckoService.getPagedMarketRanks(
+                remoteDataSource.getPagedMarketRanks(
                     "usd",
                     page,
                     state.config.pageSize
@@ -86,8 +87,8 @@ class MarketRanksMediator @Inject constructor(
             Timber.e("PagingMediator End-Of-Pagination = $endOfPaginationReached")
 
             if (loadType == LoadType.REFRESH && !rankedCoins.isNullOrEmpty()) {
-                cryptoLocalDataSource.clearCoinsRemoteKeys()
-                cryptoLocalDataSource.deleteAllRankedCoins()
+                marketLocalDataSource.clearCoinsRemoteKeys()
+                marketLocalDataSource.deleteAllRankedCoins()
             }
             val prevKey = if (page == COINGECKO_STARTING_PAGE_INDEX) null else page - 1
             val nextKey = if (endOfPaginationReached) null else page + 1
@@ -95,10 +96,10 @@ class MarketRanksMediator @Inject constructor(
                 CoinsRemoteKeys(coin_Id = it.id, prevKey = prevKey, nextKey = nextKey)
             }
             keys.apply {
-                cryptoLocalDataSource.insertAllCoinsRemoteKeys(keys)
+                marketLocalDataSource.insertAllCoinsRemoteKeys(keys)
             }
             rankedCoins.apply {
-                cryptoLocalDataSource.insertRankedCoins(rankedCoins)
+                marketLocalDataSource.insertRankedCoins(rankedCoins)
             }
 
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
@@ -117,7 +118,7 @@ class MarketRanksMediator @Inject constructor(
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
             ?.let { repo ->
                 // Get the remote keys of the last item retrieved
-                cryptoLocalDataSource.getRemoteKeysCoinId(repo.id)
+                marketLocalDataSource.getRemoteKeysCoinId(repo.id)
             }
     }
 
@@ -127,7 +128,7 @@ class MarketRanksMediator @Inject constructor(
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
             ?.let { repo ->
                 // Get the remote keys of the first items retrieved
-                cryptoLocalDataSource.getRemoteKeysCoinId(repo.id)
+                marketLocalDataSource.getRemoteKeysCoinId(repo.id)
             }
     }
 
@@ -138,7 +139,7 @@ class MarketRanksMediator @Inject constructor(
         // Get the item closest to the anchor position
         return state.anchorPosition?.let { position ->
             state.closestItemToPosition(position)?.id?.let { repoId ->
-                cryptoLocalDataSource.getRemoteKeysCoinId(repoId)
+                marketLocalDataSource.getRemoteKeysCoinId(repoId)
             }
         }
     }
