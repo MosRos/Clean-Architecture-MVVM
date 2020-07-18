@@ -37,12 +37,6 @@ class MarketLocalDataSource @Inject constructor(
 
     suspend fun deleteAllRankedCoins() = cryptoMarketDao.deleteAllRankedCoins()
 
-    suspend fun bookmarkCoin(rankedCoin: RankedCoin) = cryptoMarketDao.bookmarkCoin(rankedCoin.id)
-
-    suspend fun bookmarkCoin(coinId: String) = cryptoMarketDao.bookmarkCoin(coinId)
-
-    suspend fun getBookMarkedList() : List<RankedCoin> = cryptoMarketDao.getBookMarkedList()
-
     suspend fun insertAllCoinsRemoteKeys(remoteKeys: List<CoinsRemoteKeys>) = remoteKeysDao.insertAllRemoteKeys(remoteKeys)
 
     suspend fun getRemoteKeysCoinId(coinId: String): CoinsRemoteKeys? = remoteKeysDao.remoteKeysCoinId(coinId)

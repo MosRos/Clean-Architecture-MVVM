@@ -9,10 +9,11 @@
 package com.morostami.archsample.domain
 
 import com.morostami.archsample.domain.base.Resource
+import com.morostami.archsample.domain.base.Result
 import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
 
 interface CryptoMarketRepository {
     fun getRanks() : Flow<Resource<List<RankedCoin>>>
-    fun getBookMarks() : Flow<Resource<List<RankedCoin>>>
+    fun getBookMarks() : Flow<Result<List<RankedCoin>>>
 }

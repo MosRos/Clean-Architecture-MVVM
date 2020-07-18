@@ -1,8 +1,8 @@
 /*
  * *
- *  * Created by Moslem Rostami on 4/9/20 8:43 PM
+ *  * Created by Moslem Rostami on 7/15/20 9:39 PM
  *  * Copyright (c) 2020 . All rights reserved.
- *  * Last modified 4/9/20 8:43 PM
+ *  * Last modified 7/15/20 4:30 PM
  *
  */
 
@@ -41,10 +41,4 @@ interface CryptoMarketDao {
 
     @Query("DELETE FROM RankedCoin")
     suspend fun deleteAllRankedCoins()
-
-    @Query("UPDATE RankedCoin SET isBookMarked = :bookmark_it WHERE id = :coinId")
-    suspend fun bookmarkCoin(coinId: String, bookmark_it: Boolean = true)
-
-    @Query("SELECT * FROM RankedCoin WHERE isbookmarked = 1")
-    suspend fun getBookMarkedList() : List<RankedCoin>
 }

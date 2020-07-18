@@ -11,17 +11,21 @@ package com.morostami.archsample.data
 import com.haroldadmin.cnradapter.NetworkResponse
 import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
+import com.morostami.archsample.data.local.BookMarksLocalDataSource
 import com.morostami.archsample.data.local.MarketLocalDataSource
 import com.morostami.archsample.domain.CryptoMarketRepository
 import com.morostami.archsample.domain.base.Resource
+import com.morostami.archsample.domain.base.Result
 import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import timber.log.Timber
 import javax.inject.Inject
 
 class CryptoMarketRepositoryImpl @Inject constructor(
     private val marketLocalDataSource: MarketLocalDataSource,
+    private val bookMarksLocalDataSource: BookMarksLocalDataSource,
     private val remoteDataSource: RemoteDataSource) : CryptoMarketRepository {
 
     private val defaultLimit = 100
@@ -58,36 +62,17 @@ class CryptoMarketRepositoryImpl @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    override fun getBookMarks(): Flow<Resource<List<RankedCoin>>> {
-        return object : NetworkBoundResource<List<RankedCoin>, List<RankedCoin>, CoinGeckoApiError>(){
-            var bookmarkedIds: ArrayList<String> = ArrayList()
-
-            override suspend fun getFromDatabase(
-                isRefreshed: Boolean,
-                limit: Int,
-                offset: Int
-            ): List<RankedCoin>? {
-                val bookmarks: List<RankedCoin>? = loadBookMarksFromDB()
-                bookmarks?.apply {
-                    for (bookmark in bookmarks){
-                        bookmarkedIds.add(bookmark.id)
-                    }
-                }
-                return bookmarks
+    override fun getBookMarks(): Flow<Result<List<RankedCoin>>> {
+        return flow {
+            emit(Result.Loading)
+            val account = bookMarksLocalDataSource.getBookmarkedAccount("guest")
+            val bookmarks: List<RankedCoin> = account.bookmarkedCoins
+            try {
+                emit(Result.Success(bookmarks))
+            } catch (e: Exception) {
+                emit(Result.Error(e))
             }
-
-            override suspend fun validateCache(cachedData: List<RankedCoin>?): Boolean {
-                return !cachedData.isNullOrEmpty()
-            }
-
-            override suspend fun getFromApi(): NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
-                return fetchBookMarksFromNetwork(bookmarkedIds)
-            }
-
-            override suspend fun persistData(apiData: List<RankedCoin>) {
-                saveRanks(apiData)
-            }
-        }.flow()
+        }
     }
 
     private suspend fun loadFromDB() : List<RankedCoin> {
@@ -96,24 +81,8 @@ class CryptoMarketRepositoryImpl @Inject constructor(
         return dbResult
     }
 
-    private suspend fun loadBookMarksFromDB() : List<RankedCoin> {
-        val dbResult: List<RankedCoin> = marketLocalDataSource.getBookMarkedList()
-        Timber.e("Market DB Result is ${dbResult.size}")
-        return dbResult
-    }
-
     private suspend fun fetchFromNetwork() : NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
         val apiResult = remoteDataSource.getMarketRanks("usd")
-        when(apiResult){
-            is NetworkResponse.Success -> Timber.e(apiResult.body.size.toString())
-            is NetworkResponse.NetworkError -> Timber.e(apiResult.error.toString())
-            is NetworkResponse.ServerError -> Timber.e(apiResult.body.toString())
-        }
-        return apiResult
-    }
-
-    private suspend fun fetchBookMarksFromNetwork(ids: List<String>) : NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
-        val apiResult = remoteDataSource.getBookMarks("usd", ids)
         when(apiResult){
             is NetworkResponse.Success -> Timber.e(apiResult.body.size.toString())
             is NetworkResponse.NetworkError -> Timber.e(apiResult.error.toString())

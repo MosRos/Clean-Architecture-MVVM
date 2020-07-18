@@ -30,8 +30,9 @@ class DataModule {
     @Singleton
     @Provides
     fun provideCoinsRoomDb(application: Application) : CryptoDataBase {
-        return Room.databaseBuilder(application.applicationContext, CryptoDataBase::class.java, "coins_db")
-            .build()
+        return CryptoDataBase.getInstance(application)
+//        return Room.databaseBuilder(application.applicationContext, CryptoDataBase::class.java, "coins_db")
+//            .build()
     }
 
     @Singleton
@@ -42,8 +43,11 @@ class DataModule {
 
     @Singleton
     @Provides
-    fun provideCryptoMarketRepository(marketLocalDataSource: MarketLocalDataSource, remoteDataSource: RemoteDataSource) : CryptoMarketRepository {
-        return CryptoMarketRepositoryImpl(marketLocalDataSource, remoteDataSource)
+    fun provideCryptoMarketRepository(
+        marketLocalDataSource: MarketLocalDataSource,
+        bookMarksLocalDataSource: BookMarksLocalDataSource,
+        remoteDataSource: RemoteDataSource) : CryptoMarketRepository {
+        return CryptoMarketRepositoryImpl(marketLocalDataSource, bookMarksLocalDataSource, remoteDataSource)
     }
 
     @OptIn(ExperimentalPagingApi::class)

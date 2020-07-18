@@ -9,6 +9,7 @@
 package com.morostami.archsample.domain
 
 import com.morostami.archsample.domain.base.Resource
+import com.morostami.archsample.domain.base.Result
 import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -17,5 +18,5 @@ class CryptoMarketUseCase @Inject constructor(private val cryptoMarketRepository
 
     fun getMarketRanks() : Flow<Resource<List<RankedCoin>>> = cryptoMarketRepository.getRanks()
 
-    fun getBookMarks() : Flow<Resource<List<RankedCoin>>> = cryptoMarketRepository.getBookMarks()
+    fun getBookMarks() : Flow<Result<List<RankedCoin>>> = cryptoMarketRepository.getBookMarks()
 }

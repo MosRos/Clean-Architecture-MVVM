@@ -9,14 +9,17 @@
 package com.morostami.archsample.domain.model
 
 
-import androidx.room.Embedded
-import androidx.room.Entity
-import androidx.room.PrimaryKey
+import androidx.room.*
+import androidx.room.util.TableInfo
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.morostami.archsample.R
 
-@Entity
+@Entity(
+//    foreignKeys = [
+//        ForeignKey(entity = Account::class, parentColumns = ["account_id"], childColumns = ["accountBook_id"])
+//    ]
+)
 data class RankedCoin(
     @SerializedName("ath")
     var ath: Double? = null, // 1448.18
@@ -30,9 +33,10 @@ data class RankedCoin(
     var currentPrice: Double? = null, // 156.44
     @SerializedName("high_24h")
     var high24h: Double? = null, // 170.85
+
     @SerializedName("id")
-    @PrimaryKey
-    var id: String = "xxxbtcu", // ethereum
+    @PrimaryKey @ColumnInfo(name = "id") var id: String = "xxxbtcu", // ethereum
+
     @SerializedName("image")
     var image: String? = null, // https://assets.coingecko.com/coins/images/279/large/ethereum.png?1547034048
     @SerializedName("last_updated")
@@ -64,8 +68,10 @@ data class RankedCoin(
     var totalVolume: Long? = null, // 14969737842
 
     /*** Non Api(locale) Variables ***/
+
     @Expose(serialize = false, deserialize = false)
-    @Transient val placeholder: Int = R.drawable.placeholder_character,
+    @ColumnInfo(index = true, name = "accountBook_id") var accountBookId: String = "guggg",
+
     @Expose(serialize = false, deserialize = false)
-    var isbookmarked: Boolean = false
+    @Transient val placeholder: Int = R.drawable.placeholder_character
 )
