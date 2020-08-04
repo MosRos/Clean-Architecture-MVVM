@@ -4,13 +4,17 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import com.morostami.archsample.data.local.converters.RoomConverters
 import com.morostami.archsample.data.local.doa.BookmarksDao
 import com.morostami.archsample.data.local.doa.CoinsDao
 import com.morostami.archsample.data.local.doa.CryptoMarketDao
 import com.morostami.archsample.data.local.doa.RemoteKeysDao
+import com.morostami.archsample.data.local.entities.*
 import com.morostami.archsample.domain.model.*
 
-@Database(entities = [Coin::class, RankedCoin::class, CoinsRemoteKeys::class, Account::class], version = 3, exportSchema = false)
+@Database(entities = [CoinEntity::class, RankedCoinEntity::class, BookmarkCoinsEntity::class, CoinPriceEntity::class, CoinTotalVolumeEntity::class, CoinMarketCapsEntity::class, GlobalInfoEntity::class, CoinsRemoteKeys::class, AccountEntity::class], version = 3, exportSchema = false)
+@TypeConverters(RoomConverters::class)
 abstract class CryptoDataBase : RoomDatabase() {
 
     abstract fun coinDao() : CoinsDao

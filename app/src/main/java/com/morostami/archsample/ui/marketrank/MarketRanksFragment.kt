@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.MainApp
 import com.morostami.archsample.R
+import com.morostami.archsample.data.local.converters.toRankedCoin
 import com.morostami.archsample.databinding.FragmentMarketRankBinding
 import com.morostami.archsample.domain.model.RankedCoin
 import com.morostami.archsample.ui.MainActivity
@@ -73,7 +74,8 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
         viewLifecycleOwner.lifecycleScope.launch {
             marketViewModel.getPagedRankedCoins().collect{
                 it?.let {
-                    updateRanksAdapter(it)
+                    Timber.e("Collected Size is: ${it.toString()}")
+                    updateRanksAdapter(it.map { rankedCoinEntity -> rankedCoinEntity.toRankedCoin() })
                 }
             }
         }

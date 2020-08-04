@@ -9,8 +9,11 @@
 package com.morostami.archsample.data.api
 
 import com.haroldadmin.cnradapter.NetworkResponse
+import com.morostami.archsample.data.api.responses.CoinChartsResponse
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
 import com.morostami.archsample.data.api.responses.CoinGeckoPingResponse
+import com.morostami.archsample.data.local.entities.CoinEntity
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.domain.model.RankedCoin
 import retrofit2.Retrofit
@@ -30,7 +33,27 @@ class RemoteDataSource @Inject constructor(private val retrofit: Retrofit) : Coi
         vs_currency: String,
         page: Int,
         per_page: Int
-    ): List<RankedCoin> = apiService.getPagedMarketRanks(vs_currency = vs_currency, page = page, per_page = per_page)
+    ): List<RankedCoinEntity> = apiService.getPagedMarketRanks(vs_currency = vs_currency, page = page, per_page = per_page)
+
+    override suspend fun getCoinInfo(
+        id: String,
+        enableLocalization: Boolean,
+        enableTickers: Boolean,
+        enableMarketData: Boolean,
+        enableCommunityData: Boolean,
+        enableDeveloperData: Boolean,
+        enableSparkline: Boolean
+    ): NetworkResponse<List<RankedCoin>, CoinGeckoApiError> {
+        TODO("Not yet implemented")
+    }
+
+    override suspend fun getCoinCharts(
+        id: String,
+        vs_currency: String,
+        daysPeriod: Int
+    ): NetworkResponse<CoinChartsResponse, CoinGeckoApiError> {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun getBookMarks(
         vs_currency: String,

@@ -23,6 +23,8 @@ import androidx.paging.PagingData
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.R
+import com.morostami.archsample.data.local.converters.toCoin
+import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.databinding.FragmentCoinsSearchBinding
 import com.morostami.archsample.domain.model.Coin
 import com.morostami.archsample.ui.MainActivity
@@ -30,7 +32,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
 import javax.inject.Inject
 
-class CoinSearchFragment : Fragment(), OnCoinClick {
+class CoinSearchFragment : Fragment() {
     private val TAG: String = this.javaClass.simpleName
 
     @Inject
@@ -39,6 +41,10 @@ class CoinSearchFragment : Fragment(), OnCoinClick {
     private lateinit var dataBinding: FragmentCoinsSearchBinding
     private lateinit var coinsRecycler: RecyclerView
     private lateinit var coinsAdapter: CoinsAdapter
+
+    val onCoinClicked: (Coin) -> Unit =  {coin->
+        Toast.makeText(mContext, "${coin.name} + ${coin.symbol} clicked", Toast.LENGTH_SHORT).show()
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -84,7 +90,7 @@ class CoinSearchFragment : Fragment(), OnCoinClick {
         coinsRecycler = dataBinding.coinsRecycler
         coinsRecycler.layoutManager = gridLM
 
-        coinsAdapter = CoinsAdapter(this)
+        coinsAdapter = CoinsAdapter(onCoinClicked)
         coinsRecycler.adapter = coinsAdapter
     }
 
@@ -120,11 +126,11 @@ class CoinSearchFragment : Fragment(), OnCoinClick {
         }
     }
 
-    private suspend fun updateCoinsAdapter(coins: PagingData<Coin>) {
-        coinsAdapter.submitData(coins)
+    private suspend fun updateCoinsAdapter(coins: PagingData<CoinEntity>) {
+        coinsAdapter.submitData(coins.map { coinEntity -> coinEntity.toCoin() })
     }
 
-    override fun onItemClicked(coin: Coin) {
-        Toast.makeText(mContext, "${coin.name} + ${coin.symbol} clicked", Toast.LENGTH_SHORT).show()
-    }
+//    override fun onItemClicked(coin: Coin) {
+//        Toast.makeText(mContext, "${coin.name} + ${coin.symbol} clicked", Toast.LENGTH_SHORT).show()
+//    }
 }

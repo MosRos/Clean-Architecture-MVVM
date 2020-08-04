@@ -12,15 +12,15 @@ import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import com.morostami.archsample.data.api.CoinGeckoService
 import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.local.MarketLocalDataSource
-import com.morostami.archsample.domain.model.CoinsRemoteKeys
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.data.local.entities.CoinsRemoteKeys
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.utils.NetworkUtils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -35,13 +35,13 @@ const val PAGE_SIZE = 50
 class MarketRanksMediator @Inject constructor(
     private val marketLocalDataSource: MarketLocalDataSource,
     private val remoteDataSource: RemoteDataSource
-) : RemoteMediator<Int, RankedCoin>() {
+) : RemoteMediator<Int, RankedCoinEntity>() {
 
     override suspend fun initialize(): InitializeAction = InitializeAction.LAUNCH_INITIAL_REFRESH
 
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, RankedCoin>
+        state: PagingState<Int, RankedCoinEntity>
     ): MediatorResult {
         val page = when (loadType) {
             LoadType.REFRESH -> {
@@ -75,14 +75,12 @@ class MarketRanksMediator @Inject constructor(
                 Timber.e("No Network Connection!")
                 return MediatorResult.Success(true)
             }
-            val rankedCoins = GlobalScope.async(Dispatchers.IO) {
-                remoteDataSource.getPagedMarketRanks(
-                    "usd",
-                    page,
-                    state.config.pageSize
-                )
-            }.await()
-
+            val rankedCoins = remoteDataSource.getPagedMarketRanks(
+                "usd",
+                page,
+                state.config.pageSize
+            )
+            Timber.e("result size is: ${rankedCoins.size}")
             val endOfPaginationReached = rankedCoins.isNullOrEmpty()
             Timber.e("PagingMediator End-Of-Pagination = $endOfPaginationReached")
 
@@ -93,7 +91,11 @@ class MarketRanksMediator @Inject constructor(
             val prevKey = if (page == COINGECKO_STARTING_PAGE_INDEX) null else page - 1
             val nextKey = if (endOfPaginationReached) null else page + 1
             val keys = rankedCoins.map {
-                CoinsRemoteKeys(coin_Id = it.id, prevKey = prevKey, nextKey = nextKey)
+                CoinsRemoteKeys(
+                    coin_Id = it.id,
+                    prevKey = prevKey,
+                    nextKey = nextKey
+                )
             }
             keys.apply {
                 marketLocalDataSource.insertAllCoinsRemoteKeys(keys)
@@ -104,15 +106,18 @@ class MarketRanksMediator @Inject constructor(
 
             return MediatorResult.Success(endOfPaginationReached = endOfPaginationReached)
         } catch (exception: IOException) {
+            Timber.e(exception)
             return MediatorResult.Error(exception)
         } catch (exception: HttpException) {
+            Timber.e(exception)
             return MediatorResult.Error(exception)
         } catch (exception: Exception) {
+            Timber.e(exception)
             return MediatorResult.Error(exception)
         }
     }
 
-    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, RankedCoin>): CoinsRemoteKeys? {
+    private suspend fun getRemoteKeyForLastItem(state: PagingState<Int, RankedCoinEntity>): CoinsRemoteKeys? {
         // Get the last page that was retrieved, that contained items.
         // From that last page, get the last item
         return state.pages.lastOrNull { it.data.isNotEmpty() }?.data?.lastOrNull()
@@ -122,7 +127,7 @@ class MarketRanksMediator @Inject constructor(
             }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, RankedCoin>): CoinsRemoteKeys? {
+    private suspend fun getRemoteKeyForFirstItem(state: PagingState<Int, RankedCoinEntity>): CoinsRemoteKeys? {
         // Get the first page that was retrieved, that contained items.
         // From that first page, get the first item
         return state.pages.firstOrNull { it.data.isNotEmpty() }?.data?.firstOrNull()
@@ -133,7 +138,7 @@ class MarketRanksMediator @Inject constructor(
     }
 
     private suspend fun getRemoteKeyClosestToCurrentPosition(
-        state: PagingState<Int, RankedCoin>
+        state: PagingState<Int, RankedCoinEntity>
     ): CoinsRemoteKeys? {
         // The paging library is trying to load data after the anchor position
         // Get the item closest to the anchor position

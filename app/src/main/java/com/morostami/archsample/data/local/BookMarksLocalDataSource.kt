@@ -9,8 +9,9 @@
 package com.morostami.archsample.data.local
 
 import com.morostami.archsample.data.local.doa.BookmarksDao
-import com.morostami.archsample.domain.model.Account
-import com.morostami.archsample.domain.model.AccountBookmarkCoin
+import com.morostami.archsample.data.local.entities.AccountEntity
+import com.morostami.archsample.data.local.entities.AccountBookmarkCoin
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.domain.model.RankedCoin
 import javax.inject.Inject
 
@@ -18,7 +19,7 @@ class BookMarksLocalDataSource @Inject constructor(private val cryptoDataBase: C
 
     private val bookmarksDao by lazy { cryptoDataBase.bookmarksDao() }
 
-    override suspend fun createAccount(account: Account) = bookmarksDao.createAccount(account)
+    override suspend fun createAccount(accountEntity: AccountEntity) = bookmarksDao.createAccount(accountEntity)
 
     override suspend fun deleteAccount(accountId: String) = bookmarksDao.deleteAccount(accountId)
 
@@ -30,17 +31,17 @@ class BookMarksLocalDataSource @Inject constructor(private val cryptoDataBase: C
 
     override suspend fun getAccountBook(accountId: String): AccountBookmarkCoin = bookmarksDao.getAccountBook(accountId)
 
-    override suspend fun insertBookmarkCoins(coin: RankedCoin) = bookmarksDao.insertBookmarkCoins(coin)
+    override suspend fun insertBookmarkCoins(coin: RankedCoinEntity) = bookmarksDao.insertBookmarkCoins(coin)
 
-    suspend fun addBookmark(account: Account, rankedCoin: RankedCoin) {
-        val resultAccount = getAccountBook(accountId = account.accountId)
+    suspend fun addBookmark(accountEntity: AccountEntity, rankedCoin: RankedCoinEntity) {
+        val resultAccount = getAccountBook(accountId = accountEntity.accountId)
         val bookmarkedCoin = rankedCoin
-        bookmarkedCoin.accountBookId = resultAccount.account.accountId
+        bookmarkedCoin.accountBookId = resultAccount.accountEntity.accountId
         insertBookmarkCoins(bookmarkedCoin)
     }
 
-    suspend fun deleteBookmark(account: Account, rankedCoin: RankedCoin) {
-        val resultAccount = getAccountBook(accountId = account.accountId)
+    suspend fun deleteBookmark(accountEntity: AccountEntity, rankedCoin: RankedCoinEntity) {
+        val resultAccount = getAccountBook(accountId = accountEntity.accountId)
         resultAccount.bookmarkedCoins.forEach { coin ->
             if (coin.id == rankedCoin.id){
                 coin.accountBookId = ""

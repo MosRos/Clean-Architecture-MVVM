@@ -11,6 +11,7 @@ package com.morostami.archsample.ui.marketrank
 import androidx.lifecycle.*
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CryptoMarketUseCase
 import com.morostami.archsample.domain.MarketRanksUseCase
@@ -64,7 +65,7 @@ class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketU
         }
     }
 
-    fun getPagedRankedCoins() : Flow<PagingData<RankedCoin>> {
+    fun getPagedRankedCoins() : Flow<PagingData<RankedCoinEntity>> {
         _rankLoading.value = LoadingState.LOADING
         return marketRanksUseCase.getPagedRanks().cachedIn(viewModelScope)
     }

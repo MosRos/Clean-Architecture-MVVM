@@ -9,9 +9,10 @@
 package com.morostami.archsample.domain
 
 import androidx.paging.PagingData
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
 
 interface MarketRanksRepository {
-    fun getRanks() : Flow<PagingData<RankedCoin>>
+    fun getRanks() : Flow<PagingData<RankedCoinEntity>>
 }

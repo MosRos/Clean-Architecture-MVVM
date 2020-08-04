@@ -8,36 +8,35 @@
 
 package com.morostami.archsample.data.local.doa
 
-import androidx.annotation.NonNull
 import androidx.paging.PagingSource
 import androidx.room.*
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.domain.model.RankedCoin
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CryptoMarketDao {
 
     // For RankedCoins
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRankedCoins(coinsList: List<RankedCoin>)
+    suspend fun insertRankedCoins(coinsList: List<RankedCoinEntity>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertRankedCoin(rankedCoin: RankedCoin)
+    suspend fun insertRankedCoin(rankedCoin: RankedCoinEntity)
 
     @Query("SELECT * FROM RankedCoin ORDER BY marketCapRank ASC")
-    suspend fun getAllRankedCoins(): List<RankedCoin>
+    suspend fun getAllRankedCoins(): List<RankedCoinEntity>
 
     @Query("SELECT * FROM RankedCoin")
-    suspend fun getRankedCoinsList(): List<RankedCoin>
+    suspend fun getRankedCoinsList(): List<RankedCoinEntity>
 
     @Query("SELECT * FROM RankedCoin ORDER BY marketCapRank ASC")
-    fun getPagedRankedCoins(): PagingSource<Int, RankedCoin>
+    fun getPagedRankedCoins(): PagingSource<Int, RankedCoinEntity>
 
     @Delete
-    suspend fun deleteRankedCoin(rankedCoin: RankedCoin)
+    suspend fun deleteRankedCoin(rankedCoin: RankedCoinEntity)
 
     @Delete
-    suspend fun deleteRankedCoins(coinsList: List<RankedCoin>)
+    suspend fun deleteRankedCoins(coinsList: List<RankedCoinEntity>)
 
     @Query("DELETE FROM RankedCoin")
     suspend fun deleteAllRankedCoins()

@@ -12,7 +12,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.morostami.archsample.domain.model.CoinsRemoteKeys
+import com.morostami.archsample.data.local.entities.CoinsRemoteKeys
 
 @Dao
 interface RemoteKeysDao {

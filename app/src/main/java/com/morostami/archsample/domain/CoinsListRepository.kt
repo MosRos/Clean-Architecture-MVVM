@@ -9,11 +9,12 @@
 package com.morostami.archsample.domain
 
 import androidx.paging.PagingData
+import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.model.Coin
 import kotlinx.coroutines.flow.Flow
 
 interface CoinsListRepository {
     fun getCoins() : Flow<Resource<List<Coin>>>
-    fun searchCoins(searchInput: String) : Flow<PagingData<Coin>>
+    fun searchCoins(searchInput: String) : Flow<PagingData<CoinEntity>>
 }

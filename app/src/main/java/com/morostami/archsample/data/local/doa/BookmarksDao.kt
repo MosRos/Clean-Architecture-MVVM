@@ -8,24 +8,22 @@
 
 package com.morostami.archsample.data.local.doa
 
-import androidx.paging.PagingSource
 import androidx.room.*
-import com.morostami.archsample.domain.model.Account
-import com.morostami.archsample.domain.model.AccountBookmarkCoin
-import com.morostami.archsample.domain.model.RankedCoin
-import retrofit2.http.DELETE
+import com.morostami.archsample.data.local.entities.AccountBookmarkCoin
+import com.morostami.archsample.data.local.entities.AccountEntity
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 
 @Dao
 interface BookmarksDao {
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun createAccount(account: Account)
+    suspend fun createAccount(accountEntity: AccountEntity)
 
-    @Query("DELETE FROM account WHERE account_id = :accountId")
+    @Query("DELETE FROM Account WHERE account_id = :accountId")
     suspend fun deleteAccount(accountId: String)
 
     @Transaction
-    @Query("SELECT * FROM account WHERE account_id = :accountId")
+    @Query("SELECT * FROM Account WHERE account_id = :accountId")
     suspend fun getAccountBook(accountId: String): AccountBookmarkCoin
 
 //    @Transaction
@@ -33,7 +31,7 @@ interface BookmarksDao {
 //    suspend fun insertBookmarkCoins(coinList: List<AccountBookmarkCoin>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertBookmarkCoins(coin: RankedCoin)
+    suspend fun insertBookmarkCoins(coin: RankedCoinEntity)
 
 //    @Transaction
 //    @Insert(onConflict = OnConflictStrategy.REPLACE)

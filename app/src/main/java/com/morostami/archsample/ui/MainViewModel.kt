@@ -32,29 +32,29 @@ class MainViewModel @Inject constructor(private val coinsListUseCase: CoinsListU
     var coinSearchResults: LiveData<List<Coin>> = MutableLiveData()
 
     init {
-        getCoinsList()
+//        getCoinsList()
     }
-
-    private fun getCoinsList() {
-        _loading.value = LoadingState.LOADING
-
-        coinsList = liveData {
-            coinsListUseCase.getCoinsList().collect {coinsRes ->
-                when(coinsRes) {
-                    is Resource.Success -> {
-                        Timber.e(coinsRes.invoke().size.toString())
-                        emit(coinsRes.invoke())
-                        setLoadingState(LoadingState.LOADED)
-                    }
-                    is Resource.Error<*, *> -> {
-                        Timber.e(coinsRes.error.toString())
-                        setLoadingState(LoadingState.error("fuck"))
-                    }
-                    is Resource.Loading -> { setLoadingState(LoadingState.LOADING) }
-                }
-            }
-        }
-    }
+//
+//    private fun getCoinsList() {
+//        _loading.value = LoadingState.LOADING
+//
+//        coinsList = liveData {
+//            coinsListUseCase.getCoinsList().collect {coinsRes ->
+//                when(coinsRes) {
+//                    is Resource.Success -> {
+//                        Timber.e(coinsRes.invoke().size.toString())
+//                        emit(coinsRes.invoke())
+//                        setLoadingState(LoadingState.LOADED)
+//                    }
+//                    is Resource.Error<*, *> -> {
+//                        Timber.e(coinsRes.error.toString())
+//                        setLoadingState(LoadingState.error("fuck"))
+//                    }
+//                    is Resource.Loading -> { setLoadingState(LoadingState.LOADING) }
+//                }
+//            }
+//        }
+//    }
 
     fun searchCoins(searchInput: String) {
 //        _loading.value = LoadingState.LOADING

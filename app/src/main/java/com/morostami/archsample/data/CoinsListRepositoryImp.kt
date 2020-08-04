@@ -17,6 +17,9 @@ import com.morostami.archsample.data.api.CoinGeckoService
 import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
 import com.morostami.archsample.data.local.CoinsLocalDataSource
+import com.morostami.archsample.data.local.converters.toCoin
+import com.morostami.archsample.data.local.converters.toEntity
+import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.domain.CoinsListRepository
 import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.model.Coin
@@ -38,9 +41,9 @@ class CoinsListRepositoryImpl @Inject constructor(
 
     private val pageConfig = PagingConfig(pageSize = COINS_PAGE_SIZE, prefetchDistance = 15, enablePlaceholders = true, initialLoadSize = 100, maxSize = 200)
     private val coinsPagingSourceFactory = {coinsLocalDataSource.getPagedCoins()}
-    private fun getSearchPagingSourceFactory(query: String): () -> PagingSource<Int, Coin> = {coinsLocalDataSource.searchPagedCoins(searchQuery = query)}
+    private fun getSearchPagingSourceFactory(query: String): () -> PagingSource<Int, CoinEntity> = {coinsLocalDataSource.searchPagedCoins(searchQuery = query)}
 
-    override fun searchCoins(searchQuery: String) : Flow<PagingData<Coin>> {
+    override fun searchCoins(searchQuery: String) : Flow<PagingData<CoinEntity>> {
         val pagingSourceFactory = if (searchQuery.isNullOrEmpty()) coinsPagingSourceFactory else getSearchPagingSourceFactory(searchQuery)
 
         return Pager(
@@ -86,7 +89,7 @@ class CoinsListRepositoryImpl @Inject constructor(
 
     private suspend fun localSearchCoins(input: String) : List<Coin> {
         return GlobalScope.async(Dispatchers.IO){
-            coinsLocalDataSource.searchCoins(input)
+            coinsLocalDataSource.searchCoins(input).mapNotNull { coinEntity -> coinEntity.toCoin() }
         }.await()
     }
 
@@ -94,7 +97,7 @@ class CoinsListRepositoryImpl @Inject constructor(
 //        val coinsResult: List<Coin> = GlobalScope.async(Dispatchers.IO) {
 //            coinsRoomDataSource.getCoinsList()
 //        }.await()
-        val coinsResult: List<Coin> = coinsLocalDataSource.getCoinsList()
+        val coinsResult: List<Coin> = coinsLocalDataSource.getCoinsList().mapNotNull { coinEntity -> coinEntity.toCoin() }
         Timber.e(coinsResult.size.toString())
         return coinsResult
     }
@@ -114,6 +117,6 @@ class CoinsListRepositoryImpl @Inject constructor(
 //        GlobalScope.async(Dispatchers.IO) {
 //            coinsRoomDataSource.insertCoins(coins)
 //        }
-        coinsLocalDataSource.insertCoins(coins)
+        coinsLocalDataSource.insertCoins(coins.mapNotNull { coin -> coin.toEntity() })
     }
 }

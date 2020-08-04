@@ -16,6 +16,8 @@ import com.morostami.archsample.MainApp
 import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
 import com.morostami.archsample.data.local.CoinsLocalDataSource
+import com.morostami.archsample.data.local.converters.toEntity
+import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.domain.model.Coin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -43,7 +45,7 @@ class SyncCoinsWorker constructor(
             return when(netWorkResp) {
                 is NetworkResponse.Success -> {
                     netWorkResp.body?.let { coins ->
-                        saveCoins(coins)
+                        saveCoins(coins.mapNotNull { coin -> coin.toEntity() })
                     }
                     Result.success()
                 }
@@ -66,7 +68,7 @@ class SyncCoinsWorker constructor(
         return coinsResult
     }
 
-    suspend fun saveCoins(coins: List<Coin>) {
+    suspend fun saveCoins(coins: List<CoinEntity>) {
         Timber.e("Coins To Insert In DB ${coins.size}")
         withContext(Dispatchers.IO){
             coinsLocalDataSource.insertCoins(coins)

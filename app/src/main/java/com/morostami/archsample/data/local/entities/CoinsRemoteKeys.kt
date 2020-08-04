@@ -6,7 +6,7 @@
  *
  */
 
-package com.morostami.archsample.domain.model
+package com.morostami.archsample.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

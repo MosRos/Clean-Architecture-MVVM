@@ -11,6 +11,7 @@ package com.morostami.archsample.data
 import androidx.paging.*
 import com.morostami.archsample.data.api.CoinGeckoService
 import com.morostami.archsample.data.local.MarketLocalDataSource
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.domain.MarketRanksRepository
 import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
@@ -22,7 +23,7 @@ class MarketRanksRepositoryImpl @Inject constructor(
     private val marketLocalDataSource: MarketLocalDataSource,
     private val marketRanksMediator: MarketRanksMediator) : MarketRanksRepository {
 
-    override fun getRanks(): Flow<PagingData<RankedCoin>> {
+    override fun getRanks(): Flow<PagingData<RankedCoinEntity>> {
 
         val pagingSourceFactory = { marketLocalDataSource.getPagedRankedCoins() }
         return Pager(

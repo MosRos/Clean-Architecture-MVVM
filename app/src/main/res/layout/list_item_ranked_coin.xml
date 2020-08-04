@@ -29,7 +29,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/coinSymbolTxt"
                 app:layout_constraintHorizontal_chainStyle="spread"
-                app:placeholderImage="@{rankedCoin.placeholder}"
                 app:setImageUrl="@{rankedCoin.image}"
                 tools:src="@drawable/placeholder_character" />
         <androidx.appcompat.widget.AppCompatTextView

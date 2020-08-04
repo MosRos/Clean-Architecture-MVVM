@@ -10,6 +10,7 @@ package com.morostami.archsample.ui.search
 
 import androidx.lifecycle.ViewModel
 import androidx.paging.PagingData
+import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.domain.CoinsListUseCase
 import com.morostami.archsample.domain.model.Coin
 import kotlinx.coroutines.flow.Flow
@@ -17,6 +18,6 @@ import javax.inject.Inject
 
 class SearchViewModel @Inject constructor(private val coinsListUseCase: CoinsListUseCase) : ViewModel() {
 
-    fun searchCoins(searchInput: String): Flow<PagingData<Coin>> = coinsListUseCase.searchCoins(searchInput)
+    fun searchCoins(searchInput: String): Flow<PagingData<CoinEntity>> = coinsListUseCase.searchCoins(searchInput)
 
 }

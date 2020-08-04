@@ -9,10 +9,11 @@
 package com.morostami.archsample.domain
 
 import androidx.paging.PagingData
+import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MarketRanksUseCase @Inject constructor(private val marketRanksRepository: MarketRanksRepository) {
-    fun getPagedRanks() : Flow<PagingData<RankedCoin>> = marketRanksRepository.getRanks()
+    fun getPagedRanks() : Flow<PagingData<RankedCoinEntity>> = marketRanksRepository.getRanks()
 }

@@ -13,6 +13,8 @@ import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
 import com.morostami.archsample.data.local.BookMarksLocalDataSource
 import com.morostami.archsample.data.local.MarketLocalDataSource
+import com.morostami.archsample.data.local.converters.toEntity
+import com.morostami.archsample.data.local.converters.toRankedCoin
 import com.morostami.archsample.domain.CryptoMarketRepository
 import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.base.Result
@@ -66,7 +68,7 @@ class CryptoMarketRepositoryImpl @Inject constructor(
         return flow {
             emit(Result.Loading)
             val account = bookMarksLocalDataSource.getBookmarkedAccount("guest")
-            val bookmarks: List<RankedCoin> = account.bookmarkedCoins
+            val bookmarks: List<RankedCoin> = account.bookmarkedCoins.map { rankedCoinEntity -> rankedCoinEntity.toRankedCoin()  }
             try {
                 emit(Result.Success(bookmarks))
             } catch (e: Exception) {
@@ -92,6 +94,6 @@ class CryptoMarketRepositoryImpl @Inject constructor(
     }
 
     private suspend fun saveRanks(rankedCoins: List<RankedCoin>){
-        marketLocalDataSource.insertRankedCoins(rankedCoins)
+        marketLocalDataSource.insertRankedCoins(rankedCoins.map { rankedCoin -> rankedCoin.toEntity() })
     }
 }
