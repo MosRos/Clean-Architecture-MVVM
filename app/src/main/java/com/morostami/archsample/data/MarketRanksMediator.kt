@@ -17,10 +17,6 @@ import com.morostami.archsample.data.local.MarketLocalDataSource
 import com.morostami.archsample.data.local.entities.CoinsRemoteKeys
 import com.morostami.archsample.data.local.entities.RankedCoinEntity
 import com.morostami.archsample.utils.NetworkUtils
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
-import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 import timber.log.Timber
 import java.io.IOException
@@ -49,19 +45,19 @@ class MarketRanksMediator @Inject constructor(
                 remoteKeys?.nextKey?.minus(1) ?: COINGECKO_STARTING_PAGE_INDEX
             }
             LoadType.PREPEND -> {
-                val remoteKeys: CoinsRemoteKeys = getRemoteKeyForFirstItem(state)
+                val remoteKeys: CoinsRemoteKeys? = getRemoteKeyForFirstItem(state)
                     ?: // The LoadType is PREPEND so some data was loaded before,
                     // so we should have been able to get remote keys
                     // If the remoteKeys are null, then we're an invalid state and we have a bug
                     throw InvalidObjectException("Remote key and the prevKey should not be null")
                 // If the previous key is null, then we can't request more data
-                val prevKey = remoteKeys.prevKey ?: return MediatorResult.Success(
+                val prevKey = remoteKeys?.prevKey ?: return MediatorResult.Success(
                     endOfPaginationReached = true
                 )
-                remoteKeys.prevKey
+                prevKey
             }
             LoadType.APPEND -> {
-                val remoteKeys = getRemoteKeyForLastItem(state)
+                val remoteKeys: CoinsRemoteKeys? = getRemoteKeyForLastItem(state)
                 if (remoteKeys?.nextKey == null) {
                     throw InvalidObjectException("Remote key should not be null for $loadType")
                 }

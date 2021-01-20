@@ -75,7 +75,7 @@ class MarketRanksFragment : Fragment(), OnRankedCoinClick {
             marketViewModel.getPagedRankedCoins().collect{
                 it?.let {
                     Timber.e("Collected Size is: ${it.toString()}")
-                    updateRanksAdapter(it.map { rankedCoinEntity -> rankedCoinEntity.toRankedCoin() })
+                    updateRanksAdapter(it.mapSync { rankedCoinEntity -> rankedCoinEntity.toRankedCoin() })
                 }
             }
         }

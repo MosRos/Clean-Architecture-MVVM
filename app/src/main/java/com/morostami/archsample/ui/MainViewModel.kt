@@ -10,6 +10,7 @@ package com.morostami.archsample.ui
 
 import androidx.databinding.ObservableField
 import androidx.lifecycle.*
+import com.morostami.archsample.data.prefs.PreferencesHelper
 import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CoinsListUseCase
 import com.morostami.archsample.domain.base.Resource
@@ -21,7 +22,16 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScope
-class MainViewModel @Inject constructor(private val coinsListUseCase: CoinsListUseCase) : ViewModel() {
+class MainViewModel @Inject constructor(
+    private val coinsListUseCase: CoinsListUseCase,
+    val preferenceHelper: PreferencesHelper
+) : ViewModel() {
+
+    val selectedTheme: Int = preferenceHelper.selectedThemeMode
+    fun changeTheme(mode: Int) {
+        preferenceHelper.selectedThemeMode = mode
+    }
+
     private val _loading = MutableLiveData<LoadingState>()
     val loading: LiveData<LoadingState>
         get() = _loading

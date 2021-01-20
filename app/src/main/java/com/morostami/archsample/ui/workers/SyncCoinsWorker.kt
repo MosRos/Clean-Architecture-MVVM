@@ -41,11 +41,13 @@ class SyncCoinsWorker constructor(
     override suspend fun doWork(): Result {
         (context.applicationContext as MainApp).appComponent.injectSyncWorker(this)
         try {
-            val netWorkResp: NetworkResponse<List<Coin>, CoinGeckoApiError> = withContext(Dispatchers.IO) { fetchFromApi() }
+            val netWorkResp: NetworkResponse<List<Coin>, CoinGeckoApiError> = withContext(Dispatchers.IO) {
+                fetchFromApi()
+            }
             return when(netWorkResp) {
                 is NetworkResponse.Success -> {
-                    netWorkResp.body?.let { coins ->
-                        saveCoins(coins.mapNotNull { coin -> coin.toEntity() })
+                    netWorkResp.body.also { coins ->
+                        saveCoins(coins.map { coin -> coin.toEntity() })
                     }
                     Result.success()
                 }
@@ -58,17 +60,9 @@ class SyncCoinsWorker constructor(
         }
     }
 
-    private suspend fun fetchFromApi() : NetworkResponse<List<Coin>, CoinGeckoApiError> {
-        val coinsResult = remoteDataSource.getCoins()
-        when(coinsResult){
-            is NetworkResponse.Success -> Timber.e(coinsResult.body.size.toString())
-            is NetworkResponse.NetworkError -> Timber.e(coinsResult.error.toString())
-            is NetworkResponse.ServerError -> Timber.e(coinsResult.body.toString())
-        }
-        return coinsResult
-    }
+    private suspend fun fetchFromApi() : NetworkResponse<List<Coin>, CoinGeckoApiError> = remoteDataSource.getCoins()
 
-    suspend fun saveCoins(coins: List<CoinEntity>) {
+    private suspend fun saveCoins(coins: List<CoinEntity>) {
         Timber.e("Coins To Insert In DB ${coins.size}")
         withContext(Dispatchers.IO){
             coinsLocalDataSource.insertCoins(coins)

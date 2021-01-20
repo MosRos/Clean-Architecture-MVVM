@@ -42,7 +42,7 @@ class CoinSearchFragment : Fragment() {
     private lateinit var coinsRecycler: RecyclerView
     private lateinit var coinsAdapter: CoinsAdapter
 
-    val onCoinClicked: (Coin) -> Unit =  {coin->
+    private val onCoinClicked: (Coin) -> Unit =  {coin->
         Toast.makeText(mContext, "${coin.name} + ${coin.symbol} clicked", Toast.LENGTH_SHORT).show()
     }
 
@@ -127,7 +127,7 @@ class CoinSearchFragment : Fragment() {
     }
 
     private suspend fun updateCoinsAdapter(coins: PagingData<CoinEntity>) {
-        coinsAdapter.submitData(coins.map { coinEntity -> coinEntity.toCoin() })
+        coinsAdapter.submitData(coins.mapSync { coinEntity -> coinEntity.toCoin() })
     }
 
 //    override fun onItemClicked(coin: Coin) {

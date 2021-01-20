@@ -11,7 +11,10 @@ package com.morostami.archsample.data.prefs
 import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
+import androidx.appcompat.app.AppCompatDelegate
 import javax.inject.Inject
+
+const val THEME_MODE_KEY = "theme-mode"
 
 class PreferencesHelper @Inject constructor(private val preferences: SharedPreferences) {
 
@@ -27,7 +30,11 @@ class PreferencesHelper @Inject constructor(private val preferences: SharedPrefe
         editor.apply()
     }
 
-    private val SELECTED_THEME_MODE = Pair("theme-mode", 0)
+    fun getInstance() : SharedPreferences {
+        return preferences
+    }
+
+    val SELECTED_THEME_MODE = Pair(THEME_MODE_KEY, AppCompatDelegate.MODE_NIGHT_NO)
     var selectedThemeMode: Int
         get() = preferences.getInt(SELECTED_THEME_MODE.first, SELECTED_THEME_MODE.second)
         set(value) = preferences.edit{it.putInt(SELECTED_THEME_MODE.first, value) }
