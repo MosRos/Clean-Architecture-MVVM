@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidArchSample-MVVM</string>
+    <string name="app_name">CoinGecko-Sample</string>
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
     <string name="title_market">Market</string>

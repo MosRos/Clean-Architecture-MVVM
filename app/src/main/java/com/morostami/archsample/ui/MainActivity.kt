@@ -10,8 +10,11 @@ package com.morostami.archsample.ui
 
 import android.content.DialogInterface
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import android.view.View
+import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+import android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -29,11 +32,11 @@ import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.morostami.archsample.MainApp
 import com.morostami.archsample.R
-import com.morostami.archsample.data.prefs.PreferencesHelper
 import com.morostami.archsample.data.prefs.THEME_MODE_KEY
 import com.morostami.archsample.databinding.ActivityMainBinding
 import com.morostami.archsample.di.CoinsComponent
 import com.morostami.archsample.ui.workers.SyncCoinsWorker
+import com.morostami.archsample.utils.setNavBarLightDark
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,8 +44,10 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject lateinit var mainViewModel: MainViewModel
-//    @Inject lateinit var preferencesHelper: PreferencesHelper
+    @Inject
+    lateinit var mainViewModel: MainViewModel
+
+    //    @Inject lateinit var preferencesHelper: PreferencesHelper
     lateinit var coinsComponent: CoinsComponent
 
     private lateinit var databinding: ActivityMainBinding
@@ -54,15 +59,16 @@ class MainActivity : AppCompatActivity() {
 
     var mPreferences: SharedPreferences? = null
     val preferencesListener: SharedPreferences.OnSharedPreferenceChangeListener =
-        SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-            when(key) {
-                null -> {}
-                THEME_MODE_KEY -> {
-                    val mode: Int = sharedPreferences.getInt(THEME_MODE_KEY, -1)
-                    applyTheme(mode)
+            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
+                when (key) {
+                    null -> {
+                    }
+                    THEME_MODE_KEY -> {
+                        val mode: Int = sharedPreferences.getInt(THEME_MODE_KEY, -1)
+                        applyTheme(mode)
+                    }
                 }
             }
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         coinsComponent = (application as MainApp).appComponent.coinsComponent().create()
@@ -70,7 +76,14 @@ class MainActivity : AppCompatActivity() {
         mPreferences = mainViewModel.preferenceHelper.getInstance()
         selectedTheme = mainViewModel.selectedTheme
         AppCompatDelegate.setDefaultNightMode(selectedTheme)
-
+        if (selectedTheme == AppCompatDelegate.MODE_NIGHT_NO) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                val decorView = window.decorView
+                decorView.systemUiVisibility = FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or
+                        SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
+            }
+        }
+        setNavBarLightDark(true)
         super.onCreate(savedInstanceState)
         databinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         databinding.lifecycleOwner = this
@@ -94,7 +107,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initBottomNavAndController() {
         bottomNav = databinding.bottomNavView
-        navController = Navigation.findNavController(this, R.id.nav_host_container).also {controller ->
+        navController = Navigation.findNavController(this, R.id.nav_host_container).also { controller ->
             NavigationUI.setupWithNavController(databinding.bottomNavView, controller)
         }
 
@@ -103,7 +116,7 @@ class MainActivity : AppCompatActivity() {
                 mainViewModel.fragName.set(destination.label.toString())
             }
 
-            if (destination.id == R.id.navigation_search){
+            if (destination.id == R.id.navigation_search) {
                 databinding.appBarLayout.visibility = View.GONE
             } else {
                 databinding.appBarLayout.visibility = View.VISIBLE
@@ -113,13 +126,13 @@ class MainActivity : AppCompatActivity() {
 
     private fun initSyncWorker() {
         val syncWorkConstraints = Constraints.Builder()
-            .setRequiredNetworkType(NetworkType.CONNECTED)
-            .setRequiredNetworkType(NetworkType.NOT_ROAMING)
-            .setRequiresBatteryNotLow(true)
-            .build()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .setRequiredNetworkType(NetworkType.NOT_ROAMING)
+                .setRequiresBatteryNotLow(true)
+                .build()
         val syncRequest = OneTimeWorkRequestBuilder<SyncCoinsWorker>()
-            .setConstraints(syncWorkConstraints)
-            .build()
+                .setConstraints(syncWorkConstraints)
+                .build()
         WorkManager.getInstance(this.applicationContext).beginWith(syncRequest).enqueue()
     }
 
@@ -141,7 +154,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun setListeners() {
         databinding.themeSelectIcon.setOnClickListener {
-            if(selectedTheme < 0 || selectedTheme > 3) {
+            if (selectedTheme < 0 || selectedTheme > 3) {
                 selectedTheme = 3
             }
             showThemeDialog()
@@ -150,13 +163,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun initThemeSelectDialog() {
         themeDialogBuilder = AlertDialog.Builder(this)
-            .setTitle("Please Select Theme")
-            .setSingleChoiceItems(
-                arrayOf("Light", "Dark", "Auto"),
-                selectedTheme - 1
-            ) { dialogInterface: DialogInterface?, i: Int ->
-                changeTheme(i)
-            }
+                .setTitle("Please Select Theme")
+                .setCancelable(true)
+                .setSingleChoiceItems(
+                        arrayOf("Light", "Dark", "Auto"),
+                        selectedTheme - 1
+                ) { dialogInterface: DialogInterface?, i: Int ->
+                    changeTheme(i)
+                }
 
         themeDialog = themeDialogBuilder?.create()
     }
@@ -169,16 +183,15 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun changeTheme(mode: Int) {
-        when (mode) {
-            0 -> mainViewModel.changeTheme(1)
-            1 -> mainViewModel.changeTheme(2)
-            2 -> mainViewModel.changeTheme(-1)
-            else -> mainViewModel.changeTheme(-1)
-        }
-
+        themeDialog?.dismiss()
         lifecycleScope.launch {
-            delay(200)
-            themeDialog?.dismiss()
+            delay(100)
+            when (mode) {
+                0 -> mainViewModel.changeTheme(1)
+                1 -> mainViewModel.changeTheme(2)
+                2 -> mainViewModel.changeTheme(-1)
+                else -> mainViewModel.changeTheme(-1)
+            }
         }
     }
 
