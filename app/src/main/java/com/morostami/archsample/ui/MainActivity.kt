@@ -37,6 +37,7 @@ import com.morostami.archsample.databinding.ActivityMainBinding
 import com.morostami.archsample.di.CoinsComponent
 import com.morostami.archsample.ui.workers.SyncCoinsWorker
 import com.morostami.archsample.utils.setNavBarLightDark
+import com.morostami.archsample.utils.setStatusLightDark
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity() {
                     }
                     THEME_MODE_KEY -> {
                         val mode: Int = sharedPreferences.getInt(THEME_MODE_KEY, -1)
-                        applyTheme(mode)
+//                        applyTheme(mode)
                     }
                 }
             }
@@ -77,13 +78,12 @@ class MainActivity : AppCompatActivity() {
         selectedTheme = mainViewModel.selectedTheme
         AppCompatDelegate.setDefaultNightMode(selectedTheme)
         if (selectedTheme == AppCompatDelegate.MODE_NIGHT_NO) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                val decorView = window.decorView
-                decorView.systemUiVisibility = FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS or
-                        SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-            }
+            setStatusLightDark(true)
+            setNavBarLightDark(true)
+        } else if (selectedTheme == AppCompatDelegate.MODE_NIGHT_YES) {
+            setStatusLightDark(false)
+            setNavBarLightDark(false)
         }
-        setNavBarLightDark(true)
         super.onCreate(savedInstanceState)
         databinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         databinding.lifecycleOwner = this
@@ -192,6 +192,7 @@ class MainActivity : AppCompatActivity() {
                 2 -> mainViewModel.changeTheme(-1)
                 else -> mainViewModel.changeTheme(-1)
             }
+            applyTheme(mode)
         }
     }
 
