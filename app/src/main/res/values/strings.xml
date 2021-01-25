@@ -3,4 +3,7 @@
     <string name="title_home">Home</string>
     <string name="title_search">Search</string>
     <string name="title_market">Market</string>
+    <string name="use_system_theme">Use System Theme</string>
+    <string name="light">Light</string>
+    <string name="dark">Dark</string>
 </resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/background_bottom_sheet"
+    android:paddingBottom="@dimen/margin_noraml"
+    android:layout_gravity="bottom"
+    android:id="@+id/mainLayout">
+    <TextView
+        android:id="@+id/tvTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_noraml"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:gravity="center|start"
+        android:textColor="?attr/as_txtColorPrimary"
+        android:text="Select Theme"/>
+    <LinearLayout
+        android:id="@+id/llOptionsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_noraml"
+        android:paddingBottom="@dimen/margin_noraml"
+        android:layout_marginHorizontal="@dimen/margin_noraml"
+        app:layout_constraintTop_toBottomOf="@id/tvTitle"
+        android:background="@android:color/transparent"
+        android:orientation="vertical">
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
