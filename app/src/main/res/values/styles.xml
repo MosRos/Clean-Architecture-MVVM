@@ -56,4 +56,11 @@
         <item name="colorPrimary">?attr/colorOnPrimary</item>
         <item name="colorAccent">?attr/colorSecondary</item>
     </style>
+
+    <style name="Widget_Toggle_Option_Start_Title_Style" parent="TextAppearance.AppCompat.Body1">
+        <item name="android:textColor">?attr/as_txtColorSecondary</item>
+    </style>
+    <style name="Widget_Toggle_Option_End_Title_Style" parent="TextAppearance.AppCompat.Body2">
+        <item name="android:textColor">?attr/as_txtColorSecondary</item>
+    </style>
 </resources>

@@ -5,4 +5,16 @@
     <attr name="as_elementBackgroundColor" format="reference"/>
     <attr name="as_txtColorPrimary" format="reference"/>
     <attr name="as_txtColorSecondary" format="reference"/>
+
+    <declare-styleable name="CustomToggleView">
+        <attr name="ctv_start_title" format="string"/>
+        <attr name="ctv_start_title_style" format="reference"/>
+        <attr name="ctv_end_title" format="string"/>
+        <attr name="ctv_end_title_style" format="reference"/>
+        <attr name="ctv_show_end_title" format="boolean"/>
+        <attr name="ctv_show_end_image" format="boolean"/>
+        <attr name="ctv_is_selected" format="boolean"/>
+        <attr name="ctv_selected_drawable" format="reference"/>
+        <attr name="ctv_deselected_drawable" format="reference"/>
+    </declare-styleable>
 </resources>

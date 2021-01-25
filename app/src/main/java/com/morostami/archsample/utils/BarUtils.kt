@@ -15,8 +15,7 @@ fun AppCompatActivity.setStatusBarColor(color: Int)
     window.setStatusBarColor(color)
 }
 
-fun AppCompatActivity.setStatusLightDark(is_light: Boolean)
-{
+fun AppCompatActivity.setStatusLightDark(is_light: Boolean) {
     if (Build.VERSION.SDK_INT < 23) {
         return
     }
