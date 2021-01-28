@@ -5,6 +5,7 @@
     <attr name="as_elementBackgroundColor" format="reference"/>
     <attr name="as_txtColorPrimary" format="reference"/>
     <attr name="as_txtColorSecondary" format="reference"/>
+    <attr name="as_iconColor" format="reference"/>
 
     <declare-styleable name="CustomToggleView">
         <attr name="ctv_start_title" format="string"/>

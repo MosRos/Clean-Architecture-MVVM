@@ -3,7 +3,7 @@
         <item name="cardCornerRadius">@dimen/card_radius</item>
         <item name="cardElevation">@dimen/card_elevation</item>
         <item name="strokeWidth">@dimen/card_Stroke_width</item>
-        <item name="strokeColor">@color/divider_color</item>
+        <item name="strokeColor">@color/element_background_color</item>
         <item name="cardBackgroundColor">?attr/colorSurface</item>
     </style>
     <style name="Widget.AS.Toolbar" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar">
@@ -46,6 +46,22 @@
         <item name="android:textSize">13sp</item>
         <item name="android:background">@android:color/transparent</item>
         <item name="android:textColor">?attr/as_txtColorSecondary</item>
+        <item name="android:textStyle">normal</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextAppearance.BottomNavSelected" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/firasans_medium_font</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:gravity">center</item>
+    </style>
+
+    <style name="TextAppearance.BottomNav" parent="Widget.AppCompat.TextView">
+        <item name="fontFamily">@font/firasans_regular</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">?attr/as_iconColor</item>
         <item name="android:textStyle">normal</item>
         <item name="android:gravity">center</item>
     </style>

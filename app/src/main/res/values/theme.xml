@@ -31,6 +31,7 @@
         <item name="android:textColorLink">@color/color_primary_variant</item>
         <item name="android:textColorLinkInverse">@color/color_secondary_variant</item>
 
+        <item name="as_iconColor">@color/icon_color</item>
         <item name="as_dividerColor">@color/divider_color</item>
         <item name="as_elementBackgroundColor">@color/element_background_color</item>
         <item name="android:statusBarColor">@color/color_surface</item>

@@ -5,5 +5,5 @@
         android:color="?attr/colorPrimary" />
     <item
         android:state_checked="false"
-        android:color="?attr/colorOnSurface" />
+        android:color="?attr/as_iconColor" />
 </selector>
