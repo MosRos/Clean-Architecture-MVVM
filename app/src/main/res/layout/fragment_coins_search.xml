@@ -21,16 +21,15 @@
                 android:id="@+id/appBarLayout"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
-                android:elevation="4dp"
+                android:elevation="10dp"
                 style="@style/Widget.AS.AppBar"
-                android:background="?attr/colorSurface"
+                app:elevation="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="?attr/colorSurface">
+                    android:layout_height="match_parent">
                 <androidx.appcompat.widget.AppCompatEditText
                         android:id="@+id/searchEdt"
                         android:layout_width="match_parent"

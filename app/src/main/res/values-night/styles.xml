@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Widget.AS.CardView" parent="Base.Sample">
+        <item name="cardCornerRadius">@dimen/card_radius</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="strokeWidth">@dimen/card_Stroke_width</item>
+        <item name="strokeColor">@color/element_background_color</item>
+        <item name="cardBackgroundColor">?attr/colorSurface</item>
+    </style>
+</resources>

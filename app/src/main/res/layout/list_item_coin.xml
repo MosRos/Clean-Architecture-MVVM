@@ -22,13 +22,13 @@
             style="@style/Widget.AS.CardView">
         <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="8dp">
             <TextView
                     android:id="@+id/coinNameTxt"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toTopOf="parent"
-                    android:padding="5dp"
                     android:singleLine="true"
                     android:textColor="?attr/as_txtColorPrimary"
                     android:textSize="16sp"
@@ -40,7 +40,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintTop_toBottomOf="@id/coinNameTxt"
-                    android:padding="5dp"
+                    android:layout_marginTop="5dp"
                     android:singleLine="true"
                     android:textColor="?attr/as_txtColorSecondary"
                     android:textSize="15sp"

@@ -16,18 +16,22 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 style="@style/Widget.AS.AppBar"
+                android:backgroundTint="?attr/colorSurface"
+                android:background="?attr/colorSurface"
+                app:elevation="10dp"
+                android:elevation="10dp"
                 app:liftOnScroll="true"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
             <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="?android:attr/actionBarSize">
+                    android:layout_height="?android:attr/actionBarSize"
+                    app:layout_scrollFlags="snap">
                 <TextView
                         android:id="@+id/titleTxt"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="?attr/colorSurface"
                         android:gravity="center"
                         android:textColor="?attr/as_txtColorPrimary"
                         android:textSize="17sp"
@@ -66,7 +70,7 @@
                 style="@style/Widget.MaterialComponents.BottomNavigationView"
                 android:background="?attr/colorSurface"
                 app:backgroundTint="?attr/colorSurface"
-                app:elevation="5dp"
+                app:elevation="10dp"
                 app:menu="@menu/bottom_nav_menu" />
         <fragment
                 android:id="@+id/nav_host_container"

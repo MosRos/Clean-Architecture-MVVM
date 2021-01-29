@@ -4,13 +4,13 @@
     <color name="color_primary_variant">#7987F3</color>
     <color name="color_on_primary">#FFFFFF</color>
 
-    <color name="color_secondary">#A1A3D4</color>
+    <color name="color_secondary">#8B95EA</color>
     <color name="color_secondary_variant">#8B95EA</color>
     <color name="color_on_secondary">#000000</color>
 
-    <color name="color_background">#FFFFFF</color>
+    <color name="color_background">#F8F8FF</color>
     <color name="color_on_background">#000000</color>
-    <color name="color_surface">#F7F7FF</color>
+    <color name="color_surface">#EEEEFB</color>
     <color name="color_on_surface">#252525</color>
     <color name="color_error">#B00020</color>
     <color name="color_on_error">#FFFFFF</color>
@@ -20,6 +20,6 @@
 
     <color name="icon_color">#9593AA</color>
     <color name="divider_color">#E2E1EA</color>
-    <color name="element_background_color">#ECE6F8</color>
+    <color name="element_background_color">#E9E1F4</color>
 
 </resources>
