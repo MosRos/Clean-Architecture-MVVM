@@ -50,6 +50,16 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="Widget.BottomNav" parent="Widget.MaterialComponents.BottomNavigationView">
+        <item name="android:background">@color/color_surface</item>
+        <item name="backgroundColor">@color/color_surface</item>
+        <item name="itemIconTint">@drawable/selector_bottom_nav</item>
+        <item name="itemTextColor">@drawable/selector_bottom_nav</item>
+        <item name="itemTextAppearanceActive">@style/TextAppearance.BottomNavSelected</item>
+        <item name="itemTextAppearanceInactive">@style/TextAppearance.BottomNav</item>
+        <item name="elevation">0dp</item>
+    </style>
+
     <style name="TextAppearance.BottomNavSelected" parent="Widget.AppCompat.TextView">
         <item name="fontFamily">@font/firasans_medium_font</item>
         <item name="android:textSize">13sp</item>
