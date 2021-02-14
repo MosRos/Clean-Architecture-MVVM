@@ -22,4 +22,5 @@
     <color name="divider_color">#3F4E5E</color>
     <color name="element_background_color">#4C5B6A</color>
 
+    <color name="transparent">#00000000</color>
 </resources>

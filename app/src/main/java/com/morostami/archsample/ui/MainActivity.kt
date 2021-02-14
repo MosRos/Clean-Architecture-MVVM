@@ -10,11 +10,10 @@ package com.morostami.archsample.ui
 
 import android.content.DialogInterface
 import android.content.SharedPreferences
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import android.view.View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR
-import android.view.WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS
 import androidx.annotation.DrawableRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -32,12 +31,11 @@ import androidx.work.WorkManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.morostami.archsample.MainApp
 import com.morostami.archsample.R
-import com.morostami.archsample.data.prefs.THEME_MODE_KEY
+import com.morostami.archsample.data.prefs.PreferencesHelper
 import com.morostami.archsample.databinding.ActivityMainBinding
 import com.morostami.archsample.di.CoinsComponent
 import com.morostami.archsample.ui.workers.SyncCoinsWorker
-import com.morostami.archsample.utils.setNavBarLightDark
-import com.morostami.archsample.utils.setStatusLightDark
+import com.morostami.archsample.utils.AppBarUtils
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -45,10 +43,9 @@ import javax.inject.Inject
 
 class MainActivity : AppCompatActivity() {
 
-    @Inject
-    lateinit var mainViewModel: MainViewModel
-
-    //    @Inject lateinit var preferencesHelper: PreferencesHelper
+    @Inject lateinit var mainViewModel: MainViewModel
+    @Inject lateinit var sPreferences: SharedPreferences
+    @Inject lateinit var preferencesHelper: PreferencesHelper
     lateinit var coinsComponent: CoinsComponent
 
     private lateinit var databinding: ActivityMainBinding
@@ -58,38 +55,17 @@ class MainActivity : AppCompatActivity() {
     private var themeDialog: AlertDialog? = null
     private var selectedTheme: Int = AppCompatDelegate.MODE_NIGHT_NO
 
-    var mPreferences: SharedPreferences? = null
-    val preferencesListener: SharedPreferences.OnSharedPreferenceChangeListener =
-            SharedPreferences.OnSharedPreferenceChangeListener { sharedPreferences, key ->
-                when (key) {
-                    null -> {
-                    }
-                    THEME_MODE_KEY -> {
-                        val mode: Int = sharedPreferences.getInt(THEME_MODE_KEY, -1)
-//                        applyTheme(mode)
-                    }
-                }
-            }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         coinsComponent = (application as MainApp).appComponent.coinsComponent().create()
         coinsComponent.injectMainActivity(this)
-        mPreferences = mainViewModel.preferenceHelper.getInstance()
-        selectedTheme = mainViewModel.selectedTheme
+        selectedTheme = preferencesHelper.selectedThemeMode
         AppCompatDelegate.setDefaultNightMode(selectedTheme)
-        if (selectedTheme == AppCompatDelegate.MODE_NIGHT_NO) {
-            setStatusLightDark(true)
-            setNavBarLightDark(true)
-        } else if (selectedTheme == AppCompatDelegate.MODE_NIGHT_YES) {
-            setStatusLightDark(false)
-            setNavBarLightDark(false)
-        }
         super.onCreate(savedInstanceState)
         databinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        applyThemingConfig()
         databinding.lifecycleOwner = this
         databinding.viewmodel = mainViewModel
 
-        mPreferences?.registerOnSharedPreferenceChangeListener(preferencesListener)
         initBottomNavAndController()
         setObservers()
         setListeners()
@@ -102,7 +78,11 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mPreferences?.unregisterOnSharedPreferenceChangeListener(preferencesListener)
+    }
+
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
     }
 
     private fun initBottomNavAndController() {
@@ -187,18 +167,60 @@ class MainActivity : AppCompatActivity() {
         lifecycleScope.launch {
             delay(100)
             when (mode) {
-                0 -> mainViewModel.changeTheme(1)
-                1 -> mainViewModel.changeTheme(2)
-                2 -> mainViewModel.changeTheme(-1)
-                else -> mainViewModel.changeTheme(-1)
+                0 -> preferencesHelper.selectedThemeMode = 1
+                1 -> preferencesHelper.selectedThemeMode = 2
+                2 -> preferencesHelper.selectedThemeMode = -1
+                else -> preferencesHelper.selectedThemeMode = -1
             }
-            applyTheme(mode)
+            applyTheme()
         }
     }
 
-    private fun applyTheme(selected: Int) {
+    private fun applyTheme() {
         this.recreate()
     }
 
+    fun applyThemingConfig() {
+        val mode: Int = preferencesHelper.selectedThemeMode
+        if (mode == AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM) {
+            when(mode) {
+                AppCompatDelegate.MODE_NIGHT_YES -> {
+                    AppBarUtils.setStatusLightDark(this, false)
+                    AppBarUtils.setNavBarLightDark(this, false)
+                }
+
+                AppCompatDelegate.MODE_NIGHT_NO -> {
+                    AppBarUtils.setStatusLightDark(this, true)
+                    AppBarUtils.setNavBarLightDark(this, true)
+                }
+            }
+        } else {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
+                    Configuration.UI_MODE_NIGHT_YES -> {
+                        AppBarUtils.setStatusLightDark(this, false)
+                        AppBarUtils.setNavBarLightDark(this, false)
+                    }
+
+                    Configuration.UI_MODE_NIGHT_NO -> {
+                        AppBarUtils.setStatusLightDark(this, true)
+                        AppBarUtils.setNavBarLightDark(this, true)
+                    }
+                }
+            } else {
+                when (mode) {
+                    AppCompatDelegate.MODE_NIGHT_YES -> {
+                        AppBarUtils.setStatusLightDark(this, false)
+                        AppBarUtils.setNavBarLightDark(this, false)
+                    }
+
+                    AppCompatDelegate.MODE_NIGHT_NO -> {
+                        AppBarUtils.setStatusLightDark(this, true)
+                        AppBarUtils.setNavBarLightDark(this, true)
+                    }
+                }
+            }
+        }
+    }
 
 }

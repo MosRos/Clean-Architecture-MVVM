@@ -1,82 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
-                name="viewmodel"
-                type="com.morostami.archsample.ui.MainViewModel" />
+            name="viewmodel"
+            type="com.morostami.archsample.ui.MainViewModel" />
     </data>
+
     <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/root_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        android:id="@+id/root_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="?attr/backgroundColor">
+
         <com.google.android.material.appbar.AppBarLayout
-                android:id="@+id/appBarLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AS.AppBar"
-                android:backgroundTint="?attr/colorSurface"
-                android:background="?attr/colorSurface"
-                app:elevation="10dp"
-                android:elevation="10dp"
-                app:liftOnScroll="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+            android:id="@+id/appBarLayout"
+            style="@style/Widget.AS.AppBar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="?attr/colorSurface"
+            android:backgroundTint="?attr/colorSurface"
+            android:elevation="10dp"
+            app:elevation="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:liftOnScroll="true">
+
             <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="?android:attr/actionBarSize"
-                    app:layout_scrollFlags="snap">
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                app:layout_scrollFlags="snap">
+
                 <TextView
-                        android:id="@+id/titleTxt"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:textColor="?attr/as_txtColorPrimary"
-                        android:textSize="17sp"
-                        android:textStyle="bold"
-                        android:text="@{viewmodel.fragName}"/>
+                    android:id="@+id/titleTxt"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="@{viewmodel.fragName}"
+                    android:textColor="?attr/as_txtColorPrimary"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
                 <ImageButton
-                        android:id="@+id/themeSelectIcon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:minWidth="32dp"
-                        android:minHeight="32dp"
-                        android:layout_marginStart="@dimen/margin_noraml"
-                        android:layout_marginEnd="@dimen/margin_noraml"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:src="@drawable/ic_moon"/>
+                    android:id="@+id/themeSelectIcon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_noraml"
+                    android:layout_marginEnd="@dimen/margin_noraml"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:minWidth="32dp"
+                    android:minHeight="32dp"
+                    android:src="@drawable/ic_moon"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
             </androidx.constraintlayout.widget.ConstraintLayout>
         </com.google.android.material.appbar.AppBarLayout>
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
-                android:id="@+id/bottom_nav_view"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
-                android:layout_marginEnd="0dp"
-                app:itemIconTint="@drawable/selector_bottom_nav"
-                app:itemTextColor="@drawable/selector_bottom_nav"
-                app:itemTextAppearanceActive="@style/TextAppearance.BottomNavSelected"
-                app:itemTextAppearanceInactive="@style/TextAppearance.BottomNav"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                style="@style/Widget.BottomNav"
-                app:menu="@menu/bottom_nav_menu" />
+            android:id="@+id/bottom_nav_view"
+            style="@style/Widget.BottomNav"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="0dp"
+            android:layout_marginEnd="0dp"
+            app:itemIconTint="@drawable/selector_bottom_nav"
+            app:itemTextAppearanceActive="@style/TextAppearance.BottomNavSelected"
+            app:itemTextAppearanceInactive="@style/TextAppearance.BottomNav"
+            app:itemTextColor="@drawable/selector_bottom_nav"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:menu="@menu/bottom_nav_menu" />
+
         <fragment
-                android:id="@+id/nav_host_container"
-                android:name="androidx.navigation.fragment.NavHostFragment"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:defaultNavHost="true"
-                app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-                app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
-                app:navGraph="@navigation/main_navigation" />
+            android:id="@+id/nav_host_container"
+            android:name="androidx.navigation.fragment.NavHostFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:defaultNavHost="true"
+            app:layout_constraintBottom_toTopOf="@id/bottom_nav_view"
+            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
+            app:navGraph="@navigation/main_navigation" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

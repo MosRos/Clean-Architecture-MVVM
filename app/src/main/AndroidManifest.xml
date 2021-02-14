@@ -12,7 +12,7 @@
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/MainTheme">
+            android:theme="@style/Base.DayNight">
         <activity
                 android:name="com.morostami.archsample.ui.MainActivity"
                 android:theme="@style/MainTheme">

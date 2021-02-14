@@ -28,9 +28,9 @@ class MainViewModel @Inject constructor(
 ) : ViewModel() {
 
     val selectedTheme: Int = preferenceHelper.selectedThemeMode
-    fun changeTheme(mode: Int) {
-        preferenceHelper.selectedThemeMode = mode
-    }
+//    fun changeTheme(mode: Int) {
+//        preferenceHelper.selectedThemeMode = mode
+//    }
 
     private val _loading = MutableLiveData<LoadingState>()
     val loading: LiveData<LoadingState>
