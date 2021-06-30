@@ -7,7 +7,7 @@
 
         <variable
             name="rankedCoin"
-            type="com.morostami.archsample.domain.model.RankedCoin" />
+            type="com.morostami.archsample.model.RankedCoin" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -10,8 +10,8 @@ package com.morostami.archsample.data.local.converters
 
 import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.data.local.entities.RankedCoinEntity
-import com.morostami.archsample.domain.model.Coin
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.Coin
+import com.morostami.archsample.model.RankedCoin
 
 fun Coin.toEntity() : CoinEntity {
     return CoinEntity(

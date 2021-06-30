@@ -13,7 +13,7 @@ import com.morostami.archsample.data.local.converters.toEntity
 import com.morostami.archsample.data.local.converters.toRankedCoin
 import com.morostami.archsample.data.local.entities.CoinsRemoteKeys
 import com.morostami.archsample.data.local.entities.RankedCoinEntity
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.RankedCoin
 import javax.inject.Inject
 
 class MarketLocalDataSource @Inject constructor(

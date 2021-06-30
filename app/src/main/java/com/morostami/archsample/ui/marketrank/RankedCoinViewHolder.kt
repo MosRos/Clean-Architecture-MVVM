@@ -11,7 +11,7 @@ package com.morostami.archsample.ui.marketrank
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.databinding.ListItemRankedCoinBinding
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.RankedCoin
 
 class RankedCoinViewHolder(val databinding: ListItemRankedCoinBinding) : RecyclerView.ViewHolder(databinding.rootLayout) {
     val rootLayout: View = databinding.rootLayout

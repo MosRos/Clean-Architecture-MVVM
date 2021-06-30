@@ -6,7 +6,7 @@
  *
  */
 
-package com.morostami.archsample.domain.model
+package com.morostami.archsample.model
 
 import com.morostami.archsample.data.api.responses.Links
 

@@ -15,7 +15,7 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
 import com.morostami.archsample.R
-import com.morostami.archsample.domain.model.Roi
+import com.morostami.archsample.model.Roi
 
 @Entity(tableName = "BookmarkedCoins")
 data class BookmarkCoinsEntity(

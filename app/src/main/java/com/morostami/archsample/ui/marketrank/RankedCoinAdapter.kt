@@ -12,7 +12,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.databinding.ListItemRankedCoinBinding
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.RankedCoin
 
 class RankedCoinAdapter(private val onRankedCoinClick: OnRankedCoinClick) : RecyclerView.Adapter<RankedCoinViewHolder>() {
     private var coinsList: List<RankedCoin> = ArrayList()

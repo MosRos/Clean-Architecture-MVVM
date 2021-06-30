@@ -10,7 +10,7 @@ package com.morostami.archsample.data.api.responses
 
 
 import com.google.gson.annotations.SerializedName
-import com.morostami.archsample.domain.model.GlobalMarketInfo
+import com.morostami.archsample.model.GlobalMarketInfo
 
 data class GlobalMarketInfoRespons(
  @SerializedName("data")

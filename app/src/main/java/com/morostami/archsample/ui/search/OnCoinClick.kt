@@ -8,7 +8,7 @@
 
 package com.morostami.archsample.ui.search
 
-import com.morostami.archsample.domain.model.Coin
+import com.morostami.archsample.model.Coin
 
 interface OnCoinClick {
     fun onItemClicked(coin: Coin)

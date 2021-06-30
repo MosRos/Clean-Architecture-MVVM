@@ -11,7 +11,7 @@ package com.morostami.archsample.data.api.responses
 
 import com.google.gson.annotations.Expose
 import com.google.gson.annotations.SerializedName
-import com.morostami.archsample.domain.model.CoinInfo
+import com.morostami.archsample.model.CoinInfo
 
 data class CoinInfoResponse(
 

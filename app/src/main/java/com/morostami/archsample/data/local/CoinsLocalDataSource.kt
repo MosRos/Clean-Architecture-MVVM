@@ -1,9 +1,7 @@
 package com.morostami.archsample.data.local
 
-import androidx.paging.PagingSource
-import com.morostami.archsample.data.local.doa.CoinsDao
+import com.morostami.archsample.data.local.dao.CoinsDao
 import com.morostami.archsample.data.local.entities.CoinEntity
-import com.morostami.archsample.domain.model.Coin
 import javax.inject.Inject
 
 class CoinsLocalDataSource @Inject constructor(private val cryptoMarketDataBase: CryptoDataBase) :

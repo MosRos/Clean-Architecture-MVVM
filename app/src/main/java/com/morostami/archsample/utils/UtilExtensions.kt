@@ -16,11 +16,11 @@ fun dpToPx(dp: Float) =
         TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_DIP,
                 dp,
-                MainApp.instance.resources.displayMetrics
+                MainApp.getInstance().resources.displayMetrics
         )
 
 fun pxToDp(px: Int): Int {
-    val r: Resources = MainApp.instance.resources
+    val r: Resources = MainApp.getInstance().resources
     return TypedValue.applyDimension(
             TypedValue.COMPLEX_UNIT_PX,
             px.toFloat(),

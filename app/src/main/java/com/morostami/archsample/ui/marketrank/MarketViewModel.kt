@@ -16,7 +16,7 @@ import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CryptoMarketUseCase
 import com.morostami.archsample.domain.MarketRanksUseCase
 import com.morostami.archsample.domain.base.Resource
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.RankedCoin
 import com.morostami.archsample.utils.LoadingState
 import kotlinx.coroutines.flow.*
 import timber.log.Timber

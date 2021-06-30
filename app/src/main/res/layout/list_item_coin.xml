@@ -7,7 +7,7 @@
 
         <variable
                 name="coinItem"
-                type="com.morostami.archsample.domain.model.Coin" />
+                type="com.morostami.archsample.model.Coin" />
     </data>
     <com.google.android.material.card.MaterialCardView
             android:id="@+id/root_layout"

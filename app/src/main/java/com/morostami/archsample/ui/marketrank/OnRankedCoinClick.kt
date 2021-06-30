@@ -8,7 +8,7 @@
 
 package com.morostami.archsample.ui.marketrank
 
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.RankedCoin
 
 interface OnRankedCoinClick {
     fun onItemClicked(rankedCoin: RankedCoin, position: Int)

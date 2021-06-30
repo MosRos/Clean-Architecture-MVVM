@@ -18,7 +18,7 @@ import com.morostami.archsample.data.api.responses.CoinGeckoApiError
 import com.morostami.archsample.data.local.CoinsLocalDataSource
 import com.morostami.archsample.data.local.converters.toEntity
 import com.morostami.archsample.data.local.entities.CoinEntity
-import com.morostami.archsample.domain.model.Coin
+import com.morostami.archsample.model.Coin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import timber.log.Timber

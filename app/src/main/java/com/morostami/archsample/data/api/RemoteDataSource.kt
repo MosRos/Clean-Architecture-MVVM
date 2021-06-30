@@ -12,10 +12,9 @@ import com.haroldadmin.cnradapter.NetworkResponse
 import com.morostami.archsample.data.api.responses.CoinChartsResponse
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
 import com.morostami.archsample.data.api.responses.CoinGeckoPingResponse
-import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.data.local.entities.RankedCoinEntity
-import com.morostami.archsample.domain.model.Coin
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.Coin
+import com.morostami.archsample.model.RankedCoin
 import retrofit2.Retrofit
 import javax.inject.Inject
 

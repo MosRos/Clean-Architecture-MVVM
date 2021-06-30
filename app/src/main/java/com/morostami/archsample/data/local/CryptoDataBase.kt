@@ -6,12 +6,11 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.morostami.archsample.data.local.converters.RoomConverters
-import com.morostami.archsample.data.local.doa.BookmarksDao
-import com.morostami.archsample.data.local.doa.CoinsDao
-import com.morostami.archsample.data.local.doa.CryptoMarketDao
-import com.morostami.archsample.data.local.doa.RemoteKeysDao
+import com.morostami.archsample.data.local.dao.BookmarksDao
+import com.morostami.archsample.data.local.dao.CoinsDao
+import com.morostami.archsample.data.local.dao.CryptoMarketDao
+import com.morostami.archsample.data.local.dao.RemoteKeysDao
 import com.morostami.archsample.data.local.entities.*
-import com.morostami.archsample.domain.model.*
 
 @Database(entities = [CoinEntity::class, RankedCoinEntity::class, BookmarkCoinsEntity::class, CoinPriceEntity::class, CoinTotalVolumeEntity::class, CoinMarketCapsEntity::class, GlobalInfoEntity::class, CoinsRemoteKeys::class, AccountEntity::class], version = 3, exportSchema = false)
 @TypeConverters(RoomConverters::class)

@@ -10,7 +10,6 @@ package com.morostami.archsample.domain
 
 import androidx.paging.PagingData
 import com.morostami.archsample.data.local.entities.RankedCoinEntity
-import com.morostami.archsample.domain.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 

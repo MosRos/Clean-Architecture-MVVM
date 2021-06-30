@@ -26,7 +26,7 @@ import com.morostami.archsample.R
 import com.morostami.archsample.data.local.converters.toCoin
 import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.databinding.FragmentCoinsSearchBinding
-import com.morostami.archsample.domain.model.Coin
+import com.morostami.archsample.model.Coin
 import com.morostami.archsample.ui.MainActivity
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect

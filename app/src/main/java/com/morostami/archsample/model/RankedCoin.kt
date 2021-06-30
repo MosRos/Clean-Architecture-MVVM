@@ -6,7 +6,7 @@
  *
  */
 
-package com.morostami.archsample.domain.model
+package com.morostami.archsample.model
 
 
 data class RankedCoin(

@@ -10,23 +10,23 @@ import timber.log.Timber
 
 class MainApp : Application() {
 
-    private lateinit var _mainAppp: MainApp
     companion object {
-        lateinit var instance: MainApp
-            private set
+        private lateinit var instance: MainApp
+
+        fun getInstance() : MainApp {
+            return instance
+        }
     }
 
     val appComponent: AppComponent by lazy {
         DaggerAppComponent.builder()
-            .application(_mainAppp)
+            .application(instance)
             .build()
     }
 
     override fun onCreate() {
         super.onCreate()
-        _mainAppp = this
         instance = this
-
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         } else {
@@ -35,7 +35,7 @@ class MainApp : Application() {
     }
 
     fun getAppContext() : Application {
-        return _mainAppp
+        return instance
     }
 
     /** A tree which logs important information for crash reporting.  */

@@ -6,7 +6,7 @@
  *
  */
 
-package com.morostami.archsample.data.local.doa
+package com.morostami.archsample.data.local.dao
 
 import androidx.room.*
 import com.morostami.archsample.data.local.entities.AccountBookmarkCoin

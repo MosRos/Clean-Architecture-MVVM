@@ -13,7 +13,7 @@ import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import com.morostami.archsample.databinding.ListItemRankedCoinBinding
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.RankedCoin
 
 class MarketRanksAdapter(private val onRankedCoinClick: OnRankedCoinClick) : PagingDataAdapter<RankedCoin, RankedCoinViewHolder>(COIN_COMPARATOR) {
 

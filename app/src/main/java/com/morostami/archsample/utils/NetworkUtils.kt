@@ -20,13 +20,13 @@ object NetworkUtils {
 
     fun hasNetworkConnection(): Boolean {
         val connectivityManager =
-            MainApp.instance.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            MainApp.getInstance().getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
     }
 
     fun isConnected() : Boolean {
-        val connMgr = MainApp.instance.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connMgr = MainApp.getInstance().getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         var isWifiConn: Boolean = false
         var isMobileConn: Boolean = false
         connMgr.allNetworks.forEach { network ->
@@ -43,7 +43,7 @@ object NetworkUtils {
     }
 
     fun isOnline(): Boolean {
-        val connMgr = MainApp.instance.getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connMgr = MainApp.getInstance().getAppContext().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo: NetworkInfo? = connMgr.activeNetworkInfo
         return networkInfo?.isConnected == true
     }

@@ -6,7 +6,7 @@
  *
  */
 
-package com.morostami.archsample.data.local.doa
+package com.morostami.archsample.data.local.dao
 
 import androidx.room.Dao
 import androidx.room.Insert

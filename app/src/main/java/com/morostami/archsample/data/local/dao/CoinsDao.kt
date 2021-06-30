@@ -1,4 +1,4 @@
-package com.morostami.archsample.data.local.doa
+package com.morostami.archsample.data.local.dao
 
 import androidx.paging.PagingSource
 import androidx.room.*

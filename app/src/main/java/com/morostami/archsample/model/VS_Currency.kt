@@ -6,7 +6,7 @@
  *
  */
 
-package com.morostami.archsample.domain.model
+package com.morostami.archsample.model
 
 data class VS_Currency(
     var vs_currency: String? = "usd"

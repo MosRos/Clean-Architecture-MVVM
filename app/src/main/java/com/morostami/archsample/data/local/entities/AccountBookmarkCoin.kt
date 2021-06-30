@@ -9,7 +9,6 @@
 package com.morostami.archsample.data.local.entities
 
 import androidx.room.*
-import com.morostami.archsample.domain.model.RankedCoin
 
 
 data class AccountBookmarkCoin(

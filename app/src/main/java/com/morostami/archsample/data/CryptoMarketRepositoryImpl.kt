@@ -18,7 +18,7 @@ import com.morostami.archsample.data.local.converters.toRankedCoin
 import com.morostami.archsample.domain.CryptoMarketRepository
 import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.base.Result
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.RankedCoin
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow

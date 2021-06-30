@@ -8,11 +8,10 @@
 
 package com.morostami.archsample.data.local
 
-import com.morostami.archsample.data.local.doa.BookmarksDao
+import com.morostami.archsample.data.local.dao.BookmarksDao
 import com.morostami.archsample.data.local.entities.AccountEntity
 import com.morostami.archsample.data.local.entities.AccountBookmarkCoin
 import com.morostami.archsample.data.local.entities.RankedCoinEntity
-import com.morostami.archsample.domain.model.RankedCoin
 import javax.inject.Inject
 
 class BookMarksLocalDataSource @Inject constructor(private val cryptoDataBase: CryptoDataBase) : BookmarksDao {

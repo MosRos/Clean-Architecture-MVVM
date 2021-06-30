@@ -13,7 +13,6 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import androidx.paging.PagingSource
 import com.haroldadmin.cnradapter.NetworkResponse
-import com.morostami.archsample.data.api.CoinGeckoService
 import com.morostami.archsample.data.api.RemoteDataSource
 import com.morostami.archsample.data.api.responses.CoinGeckoApiError
 import com.morostami.archsample.data.local.CoinsLocalDataSource
@@ -22,7 +21,7 @@ import com.morostami.archsample.data.local.converters.toEntity
 import com.morostami.archsample.data.local.entities.CoinEntity
 import com.morostami.archsample.domain.CoinsListRepository
 import com.morostami.archsample.domain.base.Resource
-import com.morostami.archsample.domain.model.Coin
+import com.morostami.archsample.model.Coin
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.GlobalScope

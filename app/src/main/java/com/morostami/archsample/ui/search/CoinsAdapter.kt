@@ -14,7 +14,7 @@ import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.morostami.archsample.databinding.ListItemCoinBinding
-import com.morostami.archsample.domain.model.Coin
+import com.morostami.archsample.model.Coin
 
 class CoinsAdapter(private val onCoinClick: (Coin) -> Unit) :
     PagingDataAdapter<Coin, CoinsAdapter.CoinsViewHolder>(COINS_COMPARATOR) {

@@ -13,12 +13,8 @@ import androidx.lifecycle.*
 import com.morostami.archsample.data.prefs.PreferencesHelper
 import com.morostami.archsample.di.ActivityScope
 import com.morostami.archsample.domain.CoinsListUseCase
-import com.morostami.archsample.domain.base.Resource
-import com.morostami.archsample.domain.model.Coin
+import com.morostami.archsample.model.Coin
 import com.morostami.archsample.utils.LoadingState
-import com.morostami.archsample.domain.base.invoke
-import kotlinx.coroutines.flow.collect
-import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScope

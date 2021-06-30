@@ -6,12 +6,11 @@
  *
  */
 
-package com.morostami.archsample.data.local.doa
+package com.morostami.archsample.data.local.dao
 
 import androidx.paging.PagingSource
 import androidx.room.*
 import com.morostami.archsample.data.local.entities.RankedCoinEntity
-import com.morostami.archsample.domain.model.RankedCoin
 
 @Dao
 interface CryptoMarketDao {

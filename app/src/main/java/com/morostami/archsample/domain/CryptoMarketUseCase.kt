@@ -10,7 +10,7 @@ package com.morostami.archsample.domain
 
 import com.morostami.archsample.domain.base.Resource
 import com.morostami.archsample.domain.base.Result
-import com.morostami.archsample.domain.model.RankedCoin
+import com.morostami.archsample.model.RankedCoin
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
