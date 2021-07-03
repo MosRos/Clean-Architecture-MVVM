@@ -23,7 +23,10 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @ActivityScope
-class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketUseCase, val marketRanksUseCase: MarketRanksUseCase) : ViewModel() {
+class MarketViewModel @Inject constructor(
+    val cryptoMarketUseCase: CryptoMarketUseCase,
+    val marketRanksUseCase: MarketRanksUseCase
+) : ViewModel() {
 
     private val _rankLoading = MutableLiveData<LoadingState>()
     val ranksLoading: LiveData<LoadingState>
@@ -31,7 +34,8 @@ class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketU
 
     var marketRankedList: LiveData<List<RankedCoin>> = MutableLiveData(ArrayList())
 
-    var pagedMarketRanks: LiveData<PagingData<RankedCoin>> = MutableLiveData<PagingData<RankedCoin>>()
+    var pagedMarketRanks: LiveData<PagingData<RankedCoin>> =
+        MutableLiveData<PagingData<RankedCoin>>()
 
     init {
 //        viewModelScope.launch(Dispatchers.IO) {
@@ -44,15 +48,15 @@ class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketU
         _rankLoading.value = LoadingState.LOADING
         marketRankedList = liveData {
             Timber.e("Send Request For ranks")
-            cryptoMarketUseCase.getMarketRanks().collect {rankedResource ->
-                when(rankedResource) {
+            cryptoMarketUseCase.getMarketRanks().collect { rankedResource ->
+                when (rankedResource) {
                     is Resource.Success -> {
                         Timber.e("collected ranks ${rankedResource.data.size}")
                         emit(rankedResource.invoke())
                         setLoadingState(LoadingState.LOADED)
                     }
 
-                    is Resource.Error<*,*> -> {
+                    is Resource.Error<*, *> -> {
                         Timber.e("error collecting market ranks")
                         setLoadingState(LoadingState.error("shit!!!"))
                     }
@@ -65,7 +69,7 @@ class MarketViewModel @Inject constructor(val cryptoMarketUseCase: CryptoMarketU
         }
     }
 
-    fun getPagedRankedCoins() : Flow<PagingData<RankedCoinEntity>> {
+    fun getPagedRankedCoins(): Flow<PagingData<RankedCoinEntity>> {
         _rankLoading.value = LoadingState.LOADING
         return marketRanksUseCase.getPagedRanks().cachedIn(viewModelScope)
     }
