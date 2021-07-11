@@ -13,5 +13,5 @@ import com.google.gson.annotations.SerializedName
 
 data class CoinGeckoApiError(
     @SerializedName("error")
-    var error: String =  "invalid vs_currency"
+    var error: String? = "invalid"
 )
